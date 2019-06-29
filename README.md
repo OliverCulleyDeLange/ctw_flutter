@@ -2,6 +2,9 @@
 
 A Flutter game app.
 
+### USPs:
+- No words, all emoji / icons / images (no i18n or string management)
+
 ### Challenges (and how you cheat)
 - Quiz questions / Riddles - (google the answer)
 - Be in a location - (fake GPS)
@@ -14,7 +17,8 @@ A Flutter game app.
 - What's the password? Random 4 letter word that changes every day. Or maybe can be found in the some where? Or maybe fingerprint?
 - Device challenge like set a pin or password
 - Answer hidden in image so you have to tilt phone
-
+- Left hand or right hand dialog box - only one shot (watch ad to try again)
+- Rotate phone orientation Before timer runs out (3 seconds or something) https://flutter.dev/docs/cookbook/design/orientation
 
 
 Monetisation / Propagation:
