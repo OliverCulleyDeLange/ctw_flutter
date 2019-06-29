@@ -1,3 +1,4 @@
+import 'package:ctw_flutter/challenges/1.dart';
 import 'package:ctw_flutter/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -29,15 +30,21 @@ class MyStatelessWidget extends StatelessWidget {
         crossAxisCount: 5,
         // Generate 100 widgets that display their index in the List.
         children: List.generate(100, (index) {
-          return Card(
-            child: Text(
-              index.toString(),
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .body1,
-            ),
-          );
+          return InkWell(
+              onTap: () {
+                Route route = MaterialPageRoute(
+                    builder: (context) => Challenge1());
+                Navigator.push(context, route);
+              },
+              child: Card(
+                child: Text(
+                  index.toString(),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .body1,
+                ),
+              ));
         }));
   }
 }

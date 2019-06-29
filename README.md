@@ -19,7 +19,8 @@ A Flutter game app.
 - Answer hidden in image so you have to tilt phone
 - Left hand or right hand dialog box - only one shot (watch ad to try again)
 - Rotate phone orientation Before timer runs out (3 seconds or something) https://flutter.dev/docs/cookbook/design/orientation
-
+- One challenge tile you can't just tap on, you need to press and hold it / double tap
+- Hide a clue / code whatever in the description of the aoo in the aop store
 
 Monetisation / Propagation:
 - Watch ad for hints / clues

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
 //Colors
-const theme = Colors.deepOrange;
-const typography = Typography.whiteMountainView;
+var theme = Colors.deepOrange;
+var typography = Typography.whiteMountainView;
+
+var gradient1_1 = theme.shade50;
+var gradient1_2 = theme.shade900;
+
 
 ThemeData getTheme() {
   return ThemeData(
