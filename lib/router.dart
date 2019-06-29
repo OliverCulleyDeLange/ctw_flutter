@@ -6,7 +6,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   // Numbered challenges
   var challengeNumber = int.parse(settings.name);
   if (challengeNumber != null) {
-    print("Challenge ${challengeNumber} chosen");
+    print("Challenge $challengeNumber chosen");
     return MaterialPageRoute(builder: (_) => challenges[challengeNumber].view);
   }
 

@@ -1,17 +1,12 @@
 import 'package:ctw_flutter/theme.dart';
 import 'package:flutter/material.dart';
 
-class Challenge0 extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => new Challenge0State();
-}
+class BaseChallenge extends StatelessWidget {
+  final Widget child;
 
-class Challenge0State extends State<Challenge0> {
-  @override
+  BaseChallenge({this.child});
+
   Widget build(BuildContext context) {
-    // Override status bar color to white (as bg is blue)
-//    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-
     return Scaffold(
         body: Container(
             alignment: Alignment.center,
@@ -28,6 +23,6 @@ class Challenge0State extends State<Challenge0> {
                 gradient1_2,
               ],
             )),
-            child: Text("Challenge 0")));
+            child: child));
   }
 }

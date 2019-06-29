@@ -7,14 +7,12 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-        // Create a grid with 2 columns. If you change the scrollDirection to
-        // horizontal, this produces 2 rows.
-        crossAxisCount: 5,
-        // Generate 100 widgets that display their index in the List.
+        crossAxisCount: 4,
         children: List.generate(challenges.length, (index) {
           return InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, "$index");
+              onTap: () async {
+                var won = await Navigator.pushNamed(context, "$index");
+                print("Challenge result: $won");
               },
               child: Card(
                 child: Text(
