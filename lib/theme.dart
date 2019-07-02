@@ -35,7 +35,7 @@ ThemeData getTheme() {
 //        unselectedLabelColor: primary
 //    ),
     textTheme: typography.copyWith(
-      body1: typography.body1.copyWith(fontWeight: FontWeight.w300),
+      display2: typography.display2.copyWith(fontWeight: FontWeight.w200),
     ),
 //    accentTextTheme: Typography.whiteMountainView.copyWith(
 //      display2: TextStyle(fontWeight: FontWeight.w100),

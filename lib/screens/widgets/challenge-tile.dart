@@ -42,7 +42,10 @@ class _ChallengeTileState extends State<ChallengeTile>
               color: _colorTween.value,
               child: Text(
                 widget.index.toString(),
-                style: Theme.of(context).textTheme.body1,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .display2,
               ),
             );
           },
