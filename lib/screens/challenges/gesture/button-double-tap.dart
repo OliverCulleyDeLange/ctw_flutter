@@ -5,11 +5,12 @@ class Challenge1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseChallenge(
-        child: GestureDetector(
+        getChallengeWidget: (complete) =>
+            GestureDetector(
       child: Icon(Icons.looks_two),
       onDoubleTap: () {
         print("Double tap button challenge won");
-        Navigator.pop(context, true);
+        complete(context);
       },
     ));
   }

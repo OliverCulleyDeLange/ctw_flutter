@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 class SimpleButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseChallenge(
-        child: FlatButton.icon(
-            icon: Icon(Icons.chevron_right),
-            label: Text("Win"),
+        getChallengeWidget: (completed) =>
+            RaisedButton.icon(
+                icon: Icon(Icons.check_circle_outline),
+                label: Text("Tap me"),
             onPressed: () {
               print("Simple button challenge won");
-              Navigator.pop(context, true);
+              completed(context);
             }));
   }
 }
