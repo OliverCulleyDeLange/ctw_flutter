@@ -2,12 +2,26 @@ import 'package:ctw_flutter/screens/widgets/success-popup.dart';
 import 'package:ctw_flutter/theme.dart';
 import 'package:flutter/material.dart';
 
-class BaseChallenge extends StatelessWidget {
-  final Function getChallengeWidget;
+typedef OnCompleteFunction = Function(BuildContext context);
+typedef GetChallengeWidget = Widget Function(OnCompleteFunction complete);
+
+class BaseChallenge extends StatefulWidget {
+  final GetChallengeWidget getChallengeWidget;
 
   BaseChallenge({this.getChallengeWidget});
 
-  complete(BuildContext context) {
+  @override
+  _BaseChallengeState createState() => _BaseChallengeState();
+}
+
+class _BaseChallengeState extends State<BaseChallenge> {
+  bool completed = false;
+
+  complete(BuildContext context) async {
+    setState(() {
+      completed = true;
+    });
+    await Future.delayed(Duration(seconds: 2));
     Navigator.pop(context, true);
   }
 
@@ -32,8 +46,9 @@ class BaseChallenge extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
-                  SuccessPopup(),
-                  getChallengeWidget(complete),
+                  completed
+                      ? SuccessPopup()
+                      : widget.getChallengeWidget(complete),
                 ],
               ),
             )));
