@@ -7,8 +7,9 @@ typedef GetChallengeWidget = Widget Function(OnCompleteFunction complete);
 
 class BaseChallenge extends StatefulWidget {
   final GetChallengeWidget getChallengeWidget;
+  final complete;
 
-  BaseChallenge({this.getChallengeWidget});
+  BaseChallenge({this.getChallengeWidget, this.complete});
 
   @override
   _BaseChallengeState createState() => _BaseChallengeState();
@@ -18,6 +19,7 @@ class _BaseChallengeState extends State<BaseChallenge> {
   bool completed = false;
 
   complete(BuildContext context) async {
+    debugPrint("Challenge completed");
     setState(() {
       completed = true;
     });
@@ -26,6 +28,9 @@ class _BaseChallengeState extends State<BaseChallenge> {
   }
 
   Widget build(BuildContext context) {
+    if (widget.complete) {
+      complete(context);
+    }
     return Scaffold(
         body: Container(
             padding: EdgeInsets.all(20),
