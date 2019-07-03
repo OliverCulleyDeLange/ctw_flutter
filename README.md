@@ -13,7 +13,6 @@ A Flutter game app.
 - Mini games that seem like you win one way but you can cheat
     - Maze game - drag and drop the player, no need to complete the maze
 - Totally random score for completing a level.?
-- What's the password? Random 4 letter word that changes every day. Or maybe can be found in the some where? Or maybe fingerprint?
 - Device challenge like set a pin or password
 - Answer hidden in image so you have to tilt phone
 - Left hand or right hand dialog box - only one shot (watch ad to try again)

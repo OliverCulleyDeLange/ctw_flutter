@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 
 import '../../../prefs.dart';
 
-class Password extends StatefulWidget {
+class Passcode extends StatefulWidget {
   @override
-  _PasswordState createState() => _PasswordState();
+  _PasscodeState createState() => _PasscodeState();
 }
 
-class _PasswordState extends State<Password> {
+class _PasscodeState extends State<Passcode> {
   String passcode;
   int counter;
 
