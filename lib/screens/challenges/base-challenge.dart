@@ -28,6 +28,7 @@ class _BaseChallengeState extends State<BaseChallenge> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
+            padding: EdgeInsets.all(20),
             alignment: Alignment.center,
             decoration: BoxDecoration(
               // Box decoration takes a gradient

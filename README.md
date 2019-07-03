@@ -8,7 +8,6 @@ A Flutter game app.
 ### Challenges (and how you cheat)
 - Quiz questions / Riddles - (google the answer)
 - Be in a location - (fake GPS)
-- Quiz - Google it
 - Hidden menu to complete a level, down like 100 layers
 - Easter eggs like long pressing buttons, click X times
 - Mini games that seem like you win one way but you can cheat
@@ -22,6 +21,9 @@ A Flutter game app.
 - One challenge tile you can't just tap on, you need to press and hold it / double tap
 - Hide a clue / code whatever in the description of the app in the app store
 - Randomise the challange numbers / order so people can't say "challenge 31 is..."
+
+More draggable stuff: https://medium.com/flutter-community/a-deep-dive-into-draggable-and-dragtarget-in-flutter-487919f6f1e4
+
 
 Monetisation / Propagation:
 - Watch ad for hints / clues

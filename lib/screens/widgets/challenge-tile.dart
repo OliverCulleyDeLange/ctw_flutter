@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class ChallengeTile extends StatefulWidget {
   final index;
+  var displayNumber;
 
-  ChallengeTile(this.index);
+  ChallengeTile(this.index, [this.displayNumber]);
 
   @override
   _ChallengeTileState createState() => _ChallengeTileState();
@@ -33,7 +34,7 @@ class _ChallengeTileState extends State<ChallengeTile>
         onTap: () async {
           var won = await Navigator.pushNamed(context, "${widget.index}");
           print("Challenge result: $won");
-          if (won) {
+          if (won == true) {
             _controller.forward();
           }
         },
@@ -43,7 +44,8 @@ class _ChallengeTileState extends State<ChallengeTile>
             return Card(
               color: _colorTween.value,
               child: Text(
-                widget.index.toString(),
+                widget.displayNumber == null ? widget.index.toString() : widget
+                    .displayNumber,
                 style: Theme
                     .of(context)
                     .textTheme

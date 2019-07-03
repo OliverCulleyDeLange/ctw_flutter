@@ -25,6 +25,7 @@ class DragAndDrop extends StatelessWidget {
               color: Colors.white30,
             ),
           ),
+          Icon(Icons.arrow_forward),
           DragTarget(
             builder:
                 (BuildContext context, List candidateData, List rejectedData) {
