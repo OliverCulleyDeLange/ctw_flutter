@@ -3,14 +3,20 @@ import 'package:flutter/material.dart';
 
 class SimpleButton extends StatelessWidget {
   Widget build(BuildContext context) {
-    return BaseChallenge(
-        getChallengeWidget: (completed) =>
-            RaisedButton.icon(
-                icon: Icon(Icons.check_circle_outline),
-                label: Text("Tap me"),
-            onPressed: () {
-              print("Simple button challenge won");
-              completed(context);
-            }));
+    return BaseChallenge(getChallengeWidget: (completed) {
+      return GestureDetector(
+        onTap: () {
+          print("Simple button challenge won");
+          completed(context);
+        },
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Icon(Icons.looks_one),
+            Icon(Icons.touch_app),
+          ],
+        ),
+      );
+    });
   }
 }
