@@ -18,7 +18,7 @@ class _ChallengeTileState extends State<ChallengeTile>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 1),
       vsync: this,
     );
     _colorTween = ColorTween(

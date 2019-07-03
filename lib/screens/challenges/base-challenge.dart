@@ -21,7 +21,7 @@ class _BaseChallengeState extends State<BaseChallenge> {
     setState(() {
       completed = true;
     });
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
     Navigator.pop(context, true);
   }
 
@@ -38,8 +38,8 @@ class _BaseChallengeState extends State<BaseChallenge> {
                   // Add one stop for each color. Stops should increase from 0 to 1
                   stops: [0, 1],
                   colors: [
-                    gradient1_1,
-                    gradient1_2,
+                    backgroundGradient_1,
+                    backgroundGradient_2,
                   ],
                 )),
             child: SafeArea(

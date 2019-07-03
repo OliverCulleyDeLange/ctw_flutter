@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 var theme = Colors.deepOrange;
 var typography = Typography.whiteMountainView;
 
-var gradient1_1 = theme.shade50;
-var gradient1_2 = theme.shade900;
+var backgroundGradient_1 = theme.shade200;
+var backgroundGradient_2 = theme.shade900;
+
+var successPopupGradient_1 = theme.shade900;
+var successPopupGradient_2 = theme.shade600;
 
 
 ThemeData getTheme() {
@@ -22,7 +25,7 @@ ThemeData getTheme() {
     cardColor: theme.shade900,
 //    dividerColor: Colors.black,
 //    indicatorColor: primary,
-//      iconTheme: IconThemeData(color: Colors.pink),
+    iconTheme: IconThemeData(color: Colors.white70),
 //      accentIconTheme: IconThemeData(color: Colors.purple),
 //    primaryIconTheme: IconThemeData(color: primary),
 //    appBarTheme: AppBarTheme(
@@ -36,6 +39,7 @@ ThemeData getTheme() {
 //    ),
     textTheme: typography.copyWith(
       display2: typography.display2.copyWith(fontWeight: FontWeight.w200),
+      display3: typography.display3.copyWith(fontWeight: FontWeight.w200),
     ),
 //    accentTextTheme: Typography.whiteMountainView.copyWith(
 //      display2: TextStyle(fontWeight: FontWeight.w100),
