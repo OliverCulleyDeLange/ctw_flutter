@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Cheat to win", // Unhelpful - better name?
+      title: "Cheat to win",
       theme: getTheme(),
       onGenerateRoute: generateRoute,
       home: Scaffold(

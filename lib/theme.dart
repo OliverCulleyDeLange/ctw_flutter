@@ -25,7 +25,7 @@ ThemeData getTheme() {
     cardColor: theme.shade900,
 //    dividerColor: Colors.black,
 //    indicatorColor: primary,
-    iconTheme: IconThemeData(color: Colors.white70),
+    iconTheme: IconThemeData(color: Colors.white70, size: 50),
 //      accentIconTheme: IconThemeData(color: Colors.purple),
 //    primaryIconTheme: IconThemeData(color: primary),
 //    appBarTheme: AppBarTheme(

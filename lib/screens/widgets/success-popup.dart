@@ -48,8 +48,6 @@ class Stars extends StatelessWidget {
           starIcon,
           starIcon,
           starIcon,
-          starIcon,
-          starIcon,
         ],
       ),
     );

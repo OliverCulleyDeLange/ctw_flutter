@@ -33,7 +33,9 @@ class _ChallengeTileState extends State<ChallengeTile>
         onTap: () async {
           var won = await Navigator.pushNamed(context, "${widget.index}");
           print("Challenge result: $won");
-          _controller.forward();
+          if (won) {
+            _controller.forward();
+          }
         },
         child: AnimatedBuilder(
           animation: _colorTween,

@@ -21,6 +21,7 @@ A Flutter game app.
 - Rotate phone orientation Before timer runs out (3 seconds or something) https://flutter.dev/docs/cookbook/design/orientation
 - One challenge tile you can't just tap on, you need to press and hold it / double tap
 - Hide a clue / code whatever in the description of the app in the app store
+- Randomise the challange numbers / order so people can't say "challenge 31 is..."
 
 Monetisation / Propagation:
 - Watch ad for hints / clues
