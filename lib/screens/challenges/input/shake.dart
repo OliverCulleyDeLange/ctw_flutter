@@ -14,8 +14,6 @@ class Shake extends StatefulWidget {
 class _ShakeState extends State<Shake> {
   StreamSubscription<AccelerometerEvent> accelerometer;
 
-//  StreamSubscription<GyroscopeEvent> gyro;
-
   // All stolen from:
   // https://stackoverflow.com/questions/5271448/how-to-detect-shake-event-with-android
   static const SHAKE_THRESHOLD = 3.25; // m/S**2
@@ -30,7 +28,6 @@ class _ShakeState extends State<Shake> {
   void initState() {
     super.initState();
     accelerometer = accelerometerEvents.listen((AccelerometerEvent event) {
-//      debugPrint("Accelerometer: ${event.x} ${event.y} ${event.z}");
       int curTime = DateTime.now().millisecondsSinceEpoch;
       if ((curTime - lastShakeTime) > MIN_TIME_BETWEEN_SHAKES_MILLISECS) {
         double x = event.x;
@@ -50,17 +47,12 @@ class _ShakeState extends State<Shake> {
         }
       }
     });
-
-//    gyro = gyroscopeEvents.listen((GyroscopeEvent event) {
-//      debugPrint("Gyro: ${event.x} ${event.y} ${event.z} ");
-//    });
   }
 
   @override
   void dispose() {
     super.dispose();
     accelerometer.cancel();
-//    gyro.cancel();
   }
 
   @override
