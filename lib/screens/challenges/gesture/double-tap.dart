@@ -6,7 +6,7 @@ class DoubleTap extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseChallenge(getChallengeWidget: (complete) {
       return GestureDetector(
-        onTap: () {
+        onDoubleTap: () {
           complete(context);
         },
         child: Row(
