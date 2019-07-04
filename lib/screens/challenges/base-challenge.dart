@@ -9,7 +9,7 @@ class BaseChallenge extends StatefulWidget {
   final GetChallengeWidget getChallengeWidget;
   final complete;
 
-  BaseChallenge({this.getChallengeWidget, this.complete});
+  BaseChallenge({this.getChallengeWidget, this.complete = false});
 
   @override
   _BaseChallengeState createState() => _BaseChallengeState();
