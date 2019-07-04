@@ -27,6 +27,7 @@ class _LocalAuthState extends State<LocalAuth> {
 
   @override
   void initState() {
+    super.initState();
     _setCanDoBiometrics();
   }
 

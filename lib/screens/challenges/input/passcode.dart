@@ -29,6 +29,7 @@ class _PasscodeState extends State<Passcode> {
 
   @override
   void initState() {
+    super.initState();
     _getPasscode();
     _getCounter();
   }
