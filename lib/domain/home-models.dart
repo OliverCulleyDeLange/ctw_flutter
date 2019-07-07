@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 
 import '../prefs.dart';
 
-typedef BuildTitledTile = Widget Function(BuildContext context, String title);
-typedef BuildIconTile = Widget Function(BuildContext context, IconData icon);
+typedef BuildDynamicTitledTile = Widget Function(
+    BuildContext context, String title);
+typedef BuildTile = Widget Function(BuildContext context);
 
 class HomeModel extends ChangeNotifier {
   Map<String, ChallengeTile> challengeTiles;
   List<MenuItemTile> menuTiles;
+
+  int gridRowSize = 4;
 
   HomeModel() {
     challengeTiles = challenges.asMap().map((i, challenge) => MapEntry(
@@ -17,7 +20,11 @@ class HomeModel extends ChangeNotifier {
 
     _maybeDisplayCode();
 
-    menuTiles = [MenuItemTile(Icons.refresh)];
+    menuTiles = [
+      MenuItemTile(Icons.refresh),
+      MenuItemTile(Icons.save),
+      MenuItemTile(Icons.settings),
+    ];
   }
 
   void challengeComplete(String id) {
@@ -54,24 +61,35 @@ class HomeModel extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  setGridRowSize(double value) {
+    var round = value.round();
+    if (gridRowSize != round) {
+//      debugPrint("Slider set to $round");
+      gridRowSize = round;
+      notifyListeners();
+    }
+  }
 }
 
 class ChallengeTile {
-  BuildTitledTile get;
+  BuildDynamicTitledTile get;
   String title;
   Challenge challenge;
 
   ChallengeTile(this.title, this.get, this.challenge)
       : assert(title != null),
-        assert(get != null);
+        assert(get != null),
+        assert(challenge != null);
 }
 
 class MenuItemTile {
-  BuildIconTile get;
+  BuildTile get;
   IconData icon;
 
   MenuItemTile(this.icon) : assert(icon != null) {
-    this.get = (context, icon) => InkWell(
+    this.get = (context) =>
+        InkWell(
         onTap: () async {
           //TODO open menu / do thing
         },

@@ -44,11 +44,51 @@ List<Challenge> challenges = [
     "passcode",
     Passcode(),
   ),
+  Challenge(
+    "placeholder1",
+    SingleTap(),
+  ),
+  Challenge(
+    "placeholder2",
+    SingleTap(),
+  ),
+  Challenge(
+    "placeholder3",
+    SingleTap(),
+  ),
+  Challenge(
+    "placeholder4",
+    SingleTap(),
+  ),
+  Challenge(
+    "placeholder5",
+    SingleTap(),
+  ),
+  Challenge(
+    "placeholder6",
+    SingleTap(),
+  ),
+  Challenge(
+    "placeholder7",
+    SingleTap(),
+  ),
+  Challenge(
+    "placeholder8",
+    SingleTap(),
+  ),
+  Challenge(
+    "placeholder9",
+    SingleTap(),
+  ),
+  Challenge(
+    "placeholder10",
+    SingleTap(),
+  ),
 ];
 
 class Challenge {
   String id;
-  BuildTitledTile getTileContent;
+  BuildDynamicTitledTile getTileContent;
   Widget screen;
   bool completed = false;
 
@@ -64,7 +104,8 @@ class Challenge {
   }
 }
 
-BuildTitledTile getDefaultChallengeTileBuilder(String id, Widget screen) {
+BuildDynamicTitledTile getDefaultChallengeTileBuilder(String id,
+    Widget screen) {
   return (context, title) {
     var homeModel = Provider.of<HomeModel>(context);
     return ColourAnimatedTile(
