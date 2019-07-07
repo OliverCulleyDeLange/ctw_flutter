@@ -8,29 +8,39 @@ typedef BuildDynamicTitledTile = Widget Function(
 typedef BuildTile = Widget Function(BuildContext context);
 
 class HomeModel extends ChangeNotifier {
-  Map<String, ChallengeTile> challengeTiles;
-  List<MenuItemTile> menuTiles;
+  List<MenuItemTile> _menuTiles;
 
-  int gridRowSize = 4;
+  List<MenuItemTile> get menuTiles => _menuTiles;
+
+  Map<String, ChallengeTile> _challengeTiles = {};
+
+  Iterable<ChallengeTile> get challengeTiles => _challengeTiles.values;
+
+  int _gridRowSize = 4;
+
+  int get gridRowSize => _gridRowSize;
 
   HomeModel() {
-    challengeTiles = challenges.asMap().map((i, challenge) => MapEntry(
+    _challengeTiles = challenges.asMap().map((i, challenge) =>
+        MapEntry(
         challenge.id,
         ChallengeTile(i.toString(), challenge.getTileContent, challenge)));
 
-    _maybeDisplayCode();
-
-    menuTiles = [
-      MenuItemTile(Icons.refresh),
-      MenuItemTile(Icons.save),
+    _menuTiles = [
       MenuItemTile(Icons.settings),
+      MenuItemTile(Icons.save),
+      MenuItemTile(Icons.refresh),
     ];
+
+    _maybeDisplayCode();
   }
 
-  void challengeComplete(String id) {
-    challengeTiles[id].challenge.complete();
-    if (id == "passcode") {
-      codeDisplayed(false);
+  setGridRowSize(double value) {
+    var round = value.round();
+    if (gridRowSize != round) {
+//      debugPrint("Slider set to $round");
+      _gridRowSize = round;
+      notifyListeners();
     }
   }
 
@@ -38,37 +48,37 @@ class HomeModel extends ChangeNotifier {
     _maybeDisplayCode();
   }
 
-  bool isChallengeComplete(String id) => challengeTiles[id].challenge.completed;
-
-  Future _maybeDisplayCode() async {
-    if (await getPasscodeCounter() == 0 && !isChallengeComplete('passcode')) {
-      codeDisplayed(true);
+  void challengeComplete(String id) {
+    _challengeTiles[id].challenge.complete();
+    if (id == "passcode") {
+      _codeDisplayed(false);
     }
   }
 
-  void codeDisplayed(bool show) async {
+  bool isChallengeComplete(String id) =>
+      _challengeTiles[id].challenge.completed;
+
+  Future _maybeDisplayCode() async {
+    if (await getPasscodeCounter() == 0 && !isChallengeComplete('passcode')) {
+      _codeDisplayed(true);
+    }
+  }
+
+  void _codeDisplayed(bool show) async {
     if (show) {
       var _passcode = await getPasscode();
       debugPrint("Displaying code");
       for (var i = 0; i < 4; i++) {
-        challengeTiles.values.toList()[i].title = _passcode.substring(i, i + 1);
+        _challengeTiles.values.toList()[i].title =
+            _passcode.substring(i, i + 1);
       }
     } else {
       debugPrint("Hiding code");
       for (var i = 0; i < 4; i++) {
-        challengeTiles.values.toList()[i].title = i.toString();
+        _challengeTiles.values.toList()[i].title = i.toString();
       }
     }
     notifyListeners();
-  }
-
-  setGridRowSize(double value) {
-    var round = value.round();
-    if (gridRowSize != round) {
-//      debugPrint("Slider set to $round");
-      gridRowSize = round;
-      notifyListeners();
-    }
   }
 }
 

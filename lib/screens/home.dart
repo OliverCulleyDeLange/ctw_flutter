@@ -8,7 +8,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeModel>(builder: (context, model, child) {
-      var _challengeTiles = model.challengeTiles.values
+      var _challengeTiles = model.challengeTiles
           .map((tile) => tile.get(context, tile.title))
           .toList();
       var _menuTiles =
