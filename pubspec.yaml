@@ -28,6 +28,8 @@ dependencies:
   code_input: ^1.0.3
   local_auth: ^0.5.2+3
   sensors: ^0.4.0+1
+  provider: ^3.0.0+1
+
 
 dev_dependencies:
   flutter_test:
