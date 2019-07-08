@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:ctw_flutter/domain/scoring.dart';
 import 'package:ctw_flutter/theme.dart';
 import 'package:ctw_flutter/ui/widgets/success-popup.dart';
 import 'package:flutter/material.dart';
@@ -17,11 +20,13 @@ class BaseChallenge extends StatefulWidget {
 
 class _BaseChallengeState extends State<BaseChallenge> {
   bool completed = false;
+  StarScore starScore;
 
   complete(BuildContext context) async {
     debugPrint("Challenge completed");
     setState(() {
       completed = true;
+      starScore = StarScore(Random().nextInt(3) + 1, 3); //TODO
     });
     await Future.delayed(Duration(seconds: 1));
     Navigator.pop(context, true);
@@ -53,7 +58,7 @@ class _BaseChallengeState extends State<BaseChallenge> {
                 alignment: Alignment.center,
                 children: <Widget>[
                   completed
-                      ? SuccessPopup()
+                      ? SuccessPopup(starScore)
                       : widget.getChallengeWidget(complete),
                 ],
               ),
