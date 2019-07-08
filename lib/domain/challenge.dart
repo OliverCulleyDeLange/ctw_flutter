@@ -67,7 +67,7 @@ class Challenge {
 BuildDynamicTitledTile getDefaultChallengeTileBuilder(String id,
     Widget screen) {
   return (context, title) {
-    var homeModel = Provider.of<HomeModel>(context);
+    var homeModel = Provider.of<HomeViewModel>(context);
     return ColourAnimatedTile(
         buildChild: (animate) => InkWell(
             onTap: () async {

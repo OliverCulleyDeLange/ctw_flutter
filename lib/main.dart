@@ -1,3 +1,4 @@
+import 'package:ctw_flutter/bloc/challenge-bloc.dart';
 import 'package:ctw_flutter/domain/home-models.dart';
 import 'package:ctw_flutter/theme.dart';
 import 'package:ctw_flutter/ui/home.dart';
@@ -14,8 +15,22 @@ class MyApp extends StatelessWidget {
       title: "Cheat to win",
       theme: getTheme(),
       home: Scaffold(
-        body: ChangeNotifierProvider(
-          builder: (context) => HomeModel(),
+        body: MultiProvider(
+          providers: <SingleChildCloneableWidget>[
+            ChangeNotifierProvider(
+              builder: (context) {
+                debugPrint("Building HomeViewModel");
+                return HomeViewModel();
+              },
+            ),
+            Provider(
+              builder: (context) {
+                debugPrint("Building ChallengeProgressBloc");
+                return ChallengeProgressBloc();
+              },
+              dispose: (context, ChallengeProgressBloc bloc) => bloc?.dispose(),
+            ),
+          ],
           child: Home(),
         ),
       ),

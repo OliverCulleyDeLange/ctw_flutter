@@ -8,7 +8,7 @@ typedef BuildDynamicTitledTile = Widget Function(
     BuildContext context, String title);
 typedef BuildTile = Widget Function(BuildContext context);
 
-class HomeModel extends ChangeNotifier {
+class HomeViewModel extends ChangeNotifier {
   List<MenuItemTile> _menuTiles;
 
   List<MenuItemTile> get menuTiles => _menuTiles;
@@ -21,7 +21,7 @@ class HomeModel extends ChangeNotifier {
 
   int get gridRowSize => _gridRowSize;
 
-  HomeModel() {
+  HomeViewModel() {
     _challengeTiles = challenges.asMap().map((i, challenge) =>
         MapEntry(
         challenge.id,
