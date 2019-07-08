@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:ctw_flutter/data/challenge-progress.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -24,25 +25,21 @@ class DBProvider {
     return await openDatabase(join(await getDatabasesPath(), "ctw.db"),
         version: 1,
         onOpen: (db) {}, onCreate: (Database db, int version) async {
-      await db.execute("CREATE TABLE ChallengeProgress ("
-          "id INTEGER PRIMARY KEY,"
-          "name TEXT,"
-          "completed BIT"
-          ")");
+          debugPrint("Creating DB Table and Index");
+          await db.execute("CREATE TABLE ChallengeProgress ("
+              "id INTEGER PRIMARY KEY,"
+              "name TEXT,"
+              "completed INTEGER"
+              ")");
+          await db.execute(
+              "CREATE UNIQUE INDEX idx_challenge_name on ChallengeProgress (name)");
     });
   }
 
   newChallengeProgress(ChallengeProgress newChallengeProgress) async {
     final db = await database;
-    //get the biggest id in the table
-    var table =
-        await db.rawQuery("SELECT MAX(id)+1 as id FROM ChallengeProgress");
-    int id = table.first["id"];
-    //insert to the table using the new id
-    var raw = await db.rawInsert(
-        "INSERT Into ChallengeProgress (id,name,completed)"
-        " VALUES (?,?,?)",
-        [id, newChallengeProgress.name, newChallengeProgress.completed]);
+    var raw = await db.insert("ChallengeProgress", newChallengeProgress.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
     return raw;
   }
 
