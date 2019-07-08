@@ -1,13 +1,15 @@
 abstract class Scorer {
+  const Scorer();
+
   StarScore getStarScore(Duration timeToComplete);
 }
 
 class TimeScorer extends Scorer {
-  List<Duration> starThresholds;
+  final List<Duration> starThresholds;
 
-  TimeScorer._fromThreshold(this.starThresholds);
+  const TimeScorer._fromThreshold(this.starThresholds);
 
-  static TimeScorer fastThreeStar =
+  static const TimeScorer fastThreeStar =
       TimeScorer._fromThreshold([Duration(seconds: 10), Duration(seconds: 20)]);
 
   @override

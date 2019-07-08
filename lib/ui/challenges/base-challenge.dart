@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:ctw_flutter/domain/scoring.dart';
 import 'package:ctw_flutter/theme.dart';
 import 'package:ctw_flutter/ui/widgets/success-popup.dart';
@@ -10,23 +8,32 @@ typedef GetChallengeWidget = Widget Function(OnCompleteFunction complete);
 
 class BaseChallenge extends StatefulWidget {
   final GetChallengeWidget getChallengeWidget;
-  final complete;
+  final bool complete;
+  final Scorer scorer;
 
-  BaseChallenge({this.getChallengeWidget, this.complete = false});
+  BaseChallenge(
+      {this.getChallengeWidget, this.complete = false, this.scorer = TimeScorer
+          .fastThreeStar });
 
   @override
   _BaseChallengeState createState() => _BaseChallengeState();
 }
 
 class _BaseChallengeState extends State<BaseChallenge> {
-  bool completed = false;
-  StarScore starScore;
+  bool _completed = false;
+  StarScore _starScore;
+  Stopwatch _stopwatch = Stopwatch();
+
+  @override
+  void initState() {
+    _stopwatch.start();
+  }
 
   complete(BuildContext context) async {
     debugPrint("Challenge completed");
     setState(() {
-      completed = true;
-      starScore = StarScore(Random().nextInt(3) + 1, 3); //TODO
+      _completed = true;
+      _starScore = widget.scorer.getStarScore(_stopwatch.elapsed);
     });
     await Future.delayed(Duration(seconds: 1));
     Navigator.pop(context, true);
@@ -57,8 +64,8 @@ class _BaseChallengeState extends State<BaseChallenge> {
               child: Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
-                  completed
-                      ? SuccessPopup(starScore)
+                  _completed
+                      ? SuccessPopup(_starScore)
                       : widget.getChallengeWidget(complete),
                 ],
               ),
