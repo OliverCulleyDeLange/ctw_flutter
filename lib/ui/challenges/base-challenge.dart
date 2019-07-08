@@ -1,5 +1,5 @@
-import 'package:ctw_flutter/screens/widgets/success-popup.dart';
 import 'package:ctw_flutter/theme.dart';
+import 'package:ctw_flutter/ui/widgets/success-popup.dart';
 import 'package:flutter/material.dart';
 
 typedef OnCompleteFunction = Function(BuildContext context);

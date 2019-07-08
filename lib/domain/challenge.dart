@@ -1,13 +1,13 @@
 import 'package:ctw_flutter/domain/home-models.dart';
-import 'package:ctw_flutter/screens/challenges/device/rotate.dart';
-import 'package:ctw_flutter/screens/challenges/device/shake.dart';
-import 'package:ctw_flutter/screens/challenges/gesture/double-tap.dart';
-import 'package:ctw_flutter/screens/challenges/gesture/drag-and-drop.dart';
-import 'package:ctw_flutter/screens/challenges/gesture/long-press.dart';
-import 'package:ctw_flutter/screens/challenges/gesture/single-tap.dart';
-import 'package:ctw_flutter/screens/challenges/input/local-auth.dart';
-import 'package:ctw_flutter/screens/challenges/input/passcode.dart';
-import 'package:ctw_flutter/screens/widgets/tile.dart';
+import 'package:ctw_flutter/ui/challenges/device/rotate.dart';
+import 'package:ctw_flutter/ui/challenges/device/shake.dart';
+import 'package:ctw_flutter/ui/challenges/gesture/double-tap.dart';
+import 'package:ctw_flutter/ui/challenges/gesture/drag-and-drop.dart';
+import 'package:ctw_flutter/ui/challenges/gesture/long-press.dart';
+import 'package:ctw_flutter/ui/challenges/gesture/single-tap.dart';
+import 'package:ctw_flutter/ui/challenges/input/local-auth.dart';
+import 'package:ctw_flutter/ui/challenges/input/passcode.dart';
+import 'package:ctw_flutter/ui/widgets/tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

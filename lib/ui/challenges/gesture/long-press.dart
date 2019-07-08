@@ -1,18 +1,19 @@
-import 'package:ctw_flutter/screens/challenges/base-challenge.dart';
+import 'package:ctw_flutter/ui/challenges/base-challenge.dart';
 import 'package:flutter/material.dart';
 
-class SingleTap extends StatelessWidget {
+class LongPress extends StatelessWidget {
+  @override
   Widget build(BuildContext context) {
-    return BaseChallenge(getChallengeWidget: (completed) {
+    return BaseChallenge(getChallengeWidget: (complete) {
       return GestureDetector(
-        onTap: () {
-          completed(context);
+        onLongPress: () {
+          complete(context);
         },
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Icon(Icons.touch_app),
-            Icon(Icons.looks_one),
+            Icon(Icons.hourglass_empty),
           ],
         ),
       );

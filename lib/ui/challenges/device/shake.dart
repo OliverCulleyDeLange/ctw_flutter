@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:ctw_flutter/screens/challenges/base-challenge.dart';
+import 'package:ctw_flutter/ui/challenges/base-challenge.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sensors/sensors.dart';

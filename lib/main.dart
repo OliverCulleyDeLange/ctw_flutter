@@ -1,6 +1,6 @@
 import 'package:ctw_flutter/domain/home-models.dart';
-import 'package:ctw_flutter/screens/home.dart';
 import 'package:ctw_flutter/theme.dart';
+import 'package:ctw_flutter/ui/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,5 +1,5 @@
 import 'package:code_input/code_input.dart';
-import 'package:ctw_flutter/screens/challenges/base-challenge.dart';
+import 'package:ctw_flutter/ui/challenges/base-challenge.dart';
 import 'package:flutter/material.dart';
 
 import '../../../prefs.dart';

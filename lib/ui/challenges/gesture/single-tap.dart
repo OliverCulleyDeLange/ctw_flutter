@@ -1,19 +1,18 @@
-import 'package:ctw_flutter/screens/challenges/base-challenge.dart';
+import 'package:ctw_flutter/ui/challenges/base-challenge.dart';
 import 'package:flutter/material.dart';
 
-class DoubleTap extends StatelessWidget {
-  @override
+class SingleTap extends StatelessWidget {
   Widget build(BuildContext context) {
-    return BaseChallenge(getChallengeWidget: (complete) {
+    return BaseChallenge(getChallengeWidget: (completed) {
       return GestureDetector(
-        onDoubleTap: () {
-          complete(context);
+        onTap: () {
+          completed(context);
         },
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Icon(Icons.touch_app),
-            Icon(Icons.looks_two),
+            Icon(Icons.looks_one),
           ],
         ),
       );
