@@ -15,9 +15,13 @@ class Home extends StatelessWidget {
       model.menuTiles.map((tile) => tile.get(context)).toList();
       var _allTiles = _challengeTiles;
       for (var i = 0; i < _menuTiles.length; i++) {
-        _allTiles.insert(
-            model.gridRowSize * (i + 1) + (i * Random().nextInt(3)),
-            _menuTiles[i]);
+        var insertIndex =
+            model.gridRowSize * (i + 1) + (i * Random().nextInt(3));
+        if (_allTiles.length > insertIndex) {
+          _allTiles.insert(insertIndex, _menuTiles[i]);
+        } else {
+          _allTiles.add(_menuTiles[i]);
+        }
       }
 
       return Column(
