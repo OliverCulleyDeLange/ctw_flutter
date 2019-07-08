@@ -1,4 +1,5 @@
 import 'package:ctw_flutter/domain/challenge.dart';
+import 'package:ctw_flutter/ui/widgets/restart.dart';
 import 'package:flutter/material.dart';
 
 import '../prefs.dart';
@@ -101,7 +102,7 @@ class MenuItemTile {
     this.get = (context) =>
         InkWell(
         onTap: () async {
-          //TODO open menu / do thing
+          RestartWidget.restartApp(context);
         },
         child: Icon(icon));
   }
