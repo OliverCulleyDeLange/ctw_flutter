@@ -7,10 +7,14 @@ import 'package:sqflite/sqflite.dart';
 
 // https://github.com/Rahiche/sqlite_demo/blob/sqlite_demo_bloc/lib/Database.dart
 // https://medium.com/flutter-community/using-sqlite-in-flutter-187c1a82e8b
-class DBProvider {
-  DBProvider._();
+class ChallengeProgressDB {
+  final String dbName = "ctw.db";
+  final String table = "ChallengeProgress";
+  final String challengeNameIndexName = "idx_challenge_name";
 
-  static final DBProvider db = DBProvider._();
+  ChallengeProgressDB._();
+
+  static final ChallengeProgressDB db = ChallengeProgressDB._();
 
   Database _database;
 
@@ -22,97 +26,69 @@ class DBProvider {
   }
 
   initDB() async {
-    return await openDatabase(join(await getDatabasesPath(), "ctw.db"),
+    return await openDatabase(join(await getDatabasesPath(), dbName),
         version: 1,
         onOpen: (db) {}, onCreate: (Database db, int version) async {
           debugPrint("Creating DB Table and Index");
-          await db.execute("CREATE TABLE ChallengeProgress ("
+          await db.execute("CREATE TABLE $table ("
               "id INTEGER PRIMARY KEY,"
               "score INTEGER,"
               "name TEXT,"
               "completed INTEGER"
               ")");
           await db.execute(
-              "CREATE UNIQUE INDEX idx_challenge_name on ChallengeProgress (name)");
+              "CREATE UNIQUE INDEX $challengeNameIndexName on $table (name)");
 
           await db.insert(
-              "ChallengeProgress",
+              table,
               ChallengeProgress(
                   id: 0, score: 2, completed: true, name: "single-tap")
                   .toMap());
           await db.insert(
-              "ChallengeProgress",
+              table,
               ChallengeProgress(
                   id: 1, score: 11, completed: false, name: "double-tap")
                   .toMap());
           await db.insert(
-              "ChallengeProgress",
+              table,
               ChallengeProgress(
                   id: 2, score: 21, completed: true, name: "long-press")
                   .toMap());
     });
   }
 
-  newChallengeProgress(ChallengeProgress newChallengeProgress) async {
+  Future<List<ChallengeProgress>> getAllChallengeProgress() async {
     final db = await database;
-    var raw = await db.insert("ChallengeProgress", newChallengeProgress.toMap(),
+    var res = await db.query(table);
+    List<ChallengeProgress> list = res.isNotEmpty
+        ? res.map((c) => ChallengeProgress.fromMap(c)).toList()
+        : [];
+    return list;
+  }
+
+  // Basic CRUD Operations
+  create(ChallengeProgress newChallengeProgress) async {
+    final db = await database;
+    var raw = await db.insert(table, newChallengeProgress.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
     return raw;
   }
 
-  complete(ChallengeProgress challengeProgress) async {
+  read(int id) async {
     final db = await database;
-    ChallengeProgress completed = ChallengeProgress(
-        id: challengeProgress.id,
-        name: challengeProgress.name,
-        completed: true);
-    var res = await db.update("ChallengeProgress", completed.toMap(),
-        where: "id = ?", whereArgs: [challengeProgress.id]);
-    return res;
-  }
-
-  updateChallengeProgress(ChallengeProgress newChallengeProgress) async {
-    final db = await database;
-    var res = await db.update("ChallengeProgress", newChallengeProgress.toMap(),
-        where: "id = ?", whereArgs: [newChallengeProgress.id]);
-    return res;
-  }
-
-  getChallengeProgress(int id) async {
-    final db = await database;
-    var res =
-        await db.query("ChallengeProgress", where: "id = ?", whereArgs: [id]);
+    var res = await db.query(table, where: "id = ?", whereArgs: [id]);
     return res.isNotEmpty ? ChallengeProgress.fromMap(res.first) : null;
   }
 
-  Future<List<ChallengeProgress>> getCompletedChallenges() async {
+  update(ChallengeProgress updatedProgress) async {
     final db = await database;
-    // var res = await db.rawQuery("SELECT * FROM ChallengeProgress WHERE blocked=1");
-    var res = await db
-        .query("ChallengeProgress", where: "completed = ? ", whereArgs: [1]);
-
-    List<ChallengeProgress> list = res.isNotEmpty
-        ? res.map((c) => ChallengeProgress.fromMap(c)).toList()
-        : [];
-    return list;
+    var res = await db.update(table, updatedProgress.toMap(),
+        where: "id = ?", whereArgs: [updatedProgress.id]);
+    return res;
   }
 
-  Future<List<ChallengeProgress>> getAllChallengeProgress() async {
+  delete(int id) async {
     final db = await database;
-    var res = await db.query("ChallengeProgress");
-    List<ChallengeProgress> list = res.isNotEmpty
-        ? res.map((c) => ChallengeProgress.fromMap(c)).toList()
-        : [];
-    return list;
-  }
-
-  deleteChallengeProgress(int id) async {
-    final db = await database;
-    return db.delete("ChallengeProgress", where: "id = ?", whereArgs: [id]);
-  }
-
-  deleteAll() async {
-    final db = await database;
-    db.rawDelete("Delete * from ChallengeProgress");
+    return db.delete(table, where: "id = ?", whereArgs: [id]);
   }
 }

@@ -13,9 +13,10 @@ class Home extends StatelessWidget {
     return StreamBuilder(
       stream: challengeProgressBloc.challenges,
       builder: (BuildContext context,
-          AsyncSnapshot<List<ChallengeProgress>> challenges) {
+          AsyncSnapshot<List<ChallengeProgress>> challengeProgress) {
         debugPrint(
-            "DB Stream: ${challenges.data?.map((c) => "${c.id}:${c.name} - ${c
+            "DB Stream: ${challengeProgress.data?.map((c) => "${c.id}:${c
+                .name} - ${c
                 .completed}")}");
 
         return Consumer<HomeViewModel>(builder: (context, viewModel, child) {

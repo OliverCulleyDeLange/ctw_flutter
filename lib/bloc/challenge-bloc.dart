@@ -20,19 +20,19 @@ class ChallengeProgressBloc {
 
   getChallengeProgress() async {
     debugPrint("DB: Getting all challenge progress");
-    var allProgress = await DBProvider.db.getAllChallengeProgress();
+    var allProgress = await ChallengeProgressDB.db.getAllChallengeProgress();
     _challengeProgressController.sink.add(allProgress);
   }
 
   add(ChallengeProgress challengeProgress) {
     debugPrint("DB: Adding challenge progress");
-    DBProvider.db.newChallengeProgress(challengeProgress);
+    ChallengeProgressDB.db.create(challengeProgress);
     getChallengeProgress();
   }
 
   completeChallenge(ChallengeProgress challengeProgress) {
     debugPrint("DB: Completing challenge ${challengeProgress.name}");
-    DBProvider.db.complete(challengeProgress);
+    ChallengeProgressDB.db.update(challengeProgress);
     getChallengeProgress();
   }
 }
