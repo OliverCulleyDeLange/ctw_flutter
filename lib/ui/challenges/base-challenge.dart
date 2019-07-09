@@ -26,6 +26,7 @@ class _BaseChallengeState extends State<BaseChallenge> {
 
   @override
   void initState() {
+    super.initState();
     _stopwatch.start();
   }
 
