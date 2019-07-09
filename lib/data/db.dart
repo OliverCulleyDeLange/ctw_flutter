@@ -28,11 +28,28 @@ class DBProvider {
           debugPrint("Creating DB Table and Index");
           await db.execute("CREATE TABLE ChallengeProgress ("
               "id INTEGER PRIMARY KEY,"
+              "score INTEGER,"
               "name TEXT,"
               "completed INTEGER"
               ")");
           await db.execute(
               "CREATE UNIQUE INDEX idx_challenge_name on ChallengeProgress (name)");
+
+          await db.insert(
+              "ChallengeProgress",
+              ChallengeProgress(
+                  id: 0, score: 2, completed: true, name: "single-tap")
+                  .toMap());
+          await db.insert(
+              "ChallengeProgress",
+              ChallengeProgress(
+                  id: 1, score: 11, completed: false, name: "double-tap")
+                  .toMap());
+          await db.insert(
+              "ChallengeProgress",
+              ChallengeProgress(
+                  id: 2, score: 21, completed: true, name: "long-press")
+                  .toMap());
     });
   }
 

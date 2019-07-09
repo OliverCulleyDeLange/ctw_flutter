@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 
 class ChallengeProgressBloc {
   ChallengeProgressBloc() {
-//    add(ChallengeProgress(id: 0, completed: true, name: "single-tap"));
     getChallengeProgress();
   }
 

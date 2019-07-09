@@ -4,12 +4,14 @@
 import 'dart:convert';
 
 class ChallengeProgress {
-  int id;
-  bool completed;
-  String name;
+  final int id;
+  final int score;
+  final bool completed;
+  final String name;
 
   ChallengeProgress({
     this.id,
+    this.score,
     this.completed,
     this.name,
   });
