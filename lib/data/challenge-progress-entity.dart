@@ -25,12 +25,14 @@ class ChallengeProgressEntity {
       new ChallengeProgressEntity(
         id: json["id"],
         completed: json["completed"] == 1,
+        score: json["score"],
         name: json["name"],
       );
 
   Map<String, dynamic> toMap() => {
         "id": id,
         "completed": completed,
+    "score": score,
         "name": name,
       };
 

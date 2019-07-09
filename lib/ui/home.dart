@@ -20,6 +20,7 @@ class _HomeState extends State<Home> {
     var _challengeTiles = widget.appState.challenges
         ?.map((challenge) =>
         ColourAnimatedTile(
+            animate: challenge.completed,
             buildChild: (animate) =>
                 InkWell(
                     onTap: () async {

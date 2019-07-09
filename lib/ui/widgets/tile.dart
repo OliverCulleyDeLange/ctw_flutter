@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 class ColourAnimatedTile extends StatefulWidget {
   final Function buildChild;
 
-  ColourAnimatedTile({this.buildChild});
+  final bool animate;
+
+  ColourAnimatedTile({this.buildChild, this.animate});
 
   @override
   _ColourAnimatedTileState createState() => _ColourAnimatedTileState();
@@ -29,6 +31,9 @@ class _ColourAnimatedTileState extends State<ColourAnimatedTile>
       begin: Colors.deepOrange,
       end: Colors.green,
     ).animate(_controller);
+    if (widget.animate) {
+      _controller.forward();
+    }
   }
 
   @override

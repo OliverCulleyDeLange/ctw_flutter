@@ -1,15 +1,14 @@
 import 'dart:async';
 
 import 'package:ctw_flutter/data/challenge-progress-entity.dart';
+import 'package:ctw_flutter/domain/challenge.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'challenge-progress-repository.dart';
-
 // https://github.com/Rahiche/sqlite_demo/blob/sqlite_demo_bloc/lib/Database.dart
 // https://medium.com/flutter-community/using-sqlite-in-flutter-187c1a82e8b
-class ChallengeProgressDB extends ChallengeProgressRepository {
+class ChallengeProgressDB {
   final String dbName = "ctw.db";
   final String table = "ChallengeProgress";
   final String challengeNameIndexName = "idx_challenge_name";
@@ -30,7 +29,8 @@ class ChallengeProgressDB extends ChallengeProgressRepository {
   initDB() async {
     return await openDatabase(join(await getDatabasesPath(), dbName),
         version: 1,
-        onOpen: (db) {}, onCreate: (Database db, int version) async {
+//        onOpen: (db) {},
+        onCreate: (Database db, int version) async {
           debugPrint("Creating DB Table and Index");
           await db.execute("CREATE TABLE $table ("
               "id INTEGER PRIMARY KEY,"
@@ -41,25 +41,16 @@ class ChallengeProgressDB extends ChallengeProgressRepository {
           await db.execute(
               "CREATE UNIQUE INDEX $challengeNameIndexName on $table (name)");
 
-          await db.insert(
-              table,
-              ChallengeProgressEntity(
-                  id: 0, score: 2, completed: true, name: "single-tap")
-                  .toMap());
-          await db.insert(
-              table,
-              ChallengeProgressEntity(
-                  id: 1, score: 11, completed: false, name: "double-tap")
-                  .toMap());
-          await db.insert(
-              table,
-              ChallengeProgressEntity(
-                  id: 2, score: 21, completed: true, name: "long-press")
-                  .toMap());
+          debugPrint("Initialising DB with all challenge names");
+          for (String c in CHALLENGE_NAMES) {
+            var entity =
+            ChallengeProgressEntity(score: 0, completed: false, name: c);
+            await db.insert(table, entity.toMap(),
+                conflictAlgorithm: ConflictAlgorithm.ignore);
+          }
     });
   }
 
-  @override
   Future<List<ChallengeProgressEntity>> loadAll() async {
     debugPrint("DB: Loading all challenges");
     final db = await database;
@@ -72,11 +63,10 @@ class ChallengeProgressDB extends ChallengeProgressRepository {
 
   // Basic CRUD Operations
   create(ChallengeProgressEntity newChallengeProgress) async {
-    debugPrint("DB: Loading all challenges");
+    debugPrint("DB: Creating challenge");
     final db = await database;
-    var raw = await db.insert(table, newChallengeProgress.toMap(),
+    return await db.insert(table, newChallengeProgress.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
-    return raw;
   }
 
   read(int id) async {
@@ -86,8 +76,7 @@ class ChallengeProgressDB extends ChallengeProgressRepository {
     return res.isNotEmpty ? ChallengeProgressEntity.fromMap(res.first) : null;
   }
 
-  @override
-  Future update(ChallengeProgressEntity updatedProgress) async {
+  update(ChallengeProgressEntity updatedProgress) async {
     debugPrint("DB: Updating challenge ${updatedProgress.toString()}");
     final db = await database;
     return db.update(table, updatedProgress.toMap(),
