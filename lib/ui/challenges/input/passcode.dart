@@ -38,7 +38,7 @@ class _PasscodeState extends State<Passcode> {
     }
     if (counter == null) {
       counter = 5;
-    } else {
+    } else if (counter > 0) {
       counter--;
     }
     String jsonEncodedState = json.encode({

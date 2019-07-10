@@ -3,7 +3,6 @@ import 'package:ctw_flutter/domain/app-state.dart';
 import 'package:ctw_flutter/domain/challenge.dart';
 import 'package:ctw_flutter/theme.dart';
 import 'package:ctw_flutter/ui/home.dart';
-import 'package:ctw_flutter/ui/widgets/restart.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatefulWidget {
@@ -31,8 +30,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return RestartWidget(
-        child: MaterialApp(
+    return MaterialApp(
       title: "Cheat to win",
       theme: getTheme(),
       routes: {
@@ -41,7 +39,7 @@ class _MyAppState extends State<MyApp> {
               updateChallengeProgress: updateChallengeProgress,
             ),
       },
-    ));
+    );
   }
 
   void updateChallengeProgress(Challenge challenge) {

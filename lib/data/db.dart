@@ -9,9 +9,9 @@ import 'package:sqflite/sqflite.dart';
 // https://github.com/Rahiche/sqlite_demo/blob/sqlite_demo_bloc/lib/Database.dart
 // https://medium.com/flutter-community/using-sqlite-in-flutter-187c1a82e8b
 class ChallengeProgressDB {
-  final String dbName = "ctw.db";
-  final String table = "ChallengeProgress";
-  final String challengeNameIndexName = "idx_challenge_name";
+  static final String dbName = "ctw.db";
+  static final String table = "ChallengeProgress";
+  static final String challengeNameIndexName = "idx_challenge_name";
 
   ChallengeProgressDB._();
 
@@ -22,34 +22,41 @@ class ChallengeProgressDB {
   Future<Database> get database async {
     if (_database != null) return _database;
     // if _database is null we instantiate it
-    _database = await initDB();
+    _database = await initDb();
     return _database;
   }
 
-  initDB() async {
-    return await openDatabase(join(await getDatabasesPath(), dbName),
-        version: 1,
-//        onOpen: (db) {},
-        onCreate: (Database db, int version) async {
-          debugPrint("Creating DB Table and Index");
-          await db.execute("CREATE TABLE $table ("
-              "id INTEGER PRIMARY KEY,"
-              "name TEXT,"
-              "score INTEGER,"
-              "completed INTEGER,"
-              "state TEXT"
-              ")");
-          await db.execute(
-              "CREATE UNIQUE INDEX $challengeNameIndexName on $table (name)");
+  static resetDb() async {
+    var d = await db.database;
+    await d.rawDelete("DROP TABLE IF EXISTS $table");
+    await db.createDb(d);
+  }
 
-          debugPrint("Initialising DB with all challenge names");
-          for (String challengeName in CHALLENGE_NAMES) {
-            var entity =
-            Challenge(challengeName).toEntity();
-            await db.insert(table, entity.toMap(),
-                conflictAlgorithm: ConflictAlgorithm.ignore);
-          }
-    });
+  initDb() async {
+    var dbPath = join(await getDatabasesPath(), dbName);
+    return await openDatabase(dbPath, version: 1,
+//        onOpen: (db) {},
+        onCreate: (Database db, int version) async => createDb(db));
+  }
+
+  FutureOr<void> createDb(Database db) async {
+    debugPrint("Creating DB Table and Index");
+    await db.execute("CREATE TABLE $table ("
+        "id INTEGER PRIMARY KEY,"
+        "name TEXT,"
+        "score INTEGER,"
+        "completed INTEGER,"
+        "state TEXT"
+        ")");
+    await db.execute(
+        "CREATE UNIQUE INDEX $challengeNameIndexName on $table (name)");
+
+    debugPrint("Initialising DB with all challenge names");
+    for (String challengeName in CHALLENGE_NAMES) {
+      var entity = Challenge(challengeName).toEntity();
+      await db.insert(table, entity.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.ignore);
+    }
   }
 
   Future<List<ChallengeProgressEntity>> loadAll() async {

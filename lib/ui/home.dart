@@ -1,3 +1,4 @@
+import 'package:ctw_flutter/data/db.dart';
 import 'package:ctw_flutter/domain/app-state.dart';
 import 'package:ctw_flutter/domain/challenge.dart';
 import 'package:ctw_flutter/ui/challenges/device/rotate.dart';
@@ -8,6 +9,7 @@ import 'package:ctw_flutter/ui/challenges/gesture/long-press.dart';
 import 'package:ctw_flutter/ui/challenges/gesture/single-tap.dart';
 import 'package:ctw_flutter/ui/challenges/input/local-auth.dart';
 import 'package:ctw_flutter/ui/challenges/input/passcode.dart';
+import 'package:ctw_flutter/ui/widgets/restart.dart';
 import 'package:ctw_flutter/ui/widgets/tile.dart';
 import 'package:flutter/material.dart';
 
@@ -49,46 +51,25 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    var _challengeTiles = widget.appState.challenges?.values
-        ?.toList()
-        ?.asMap()
-        ?.map((index, challenge) =>
+    List<Widget> _challengeTiles = (widget.appState.challenges ?? {}).values
+        .toList()
+        .asMap()
+        .map((index, challenge) =>
         MapEntry(
             index,
-            ColourAnimatedTile(
-                animate: challenge.completed,
-                buildChild: (animate) =>
-                    InkWell(
-                    onTap: () async {
-                      var sw = Stopwatch();
-                      sw.start();
-                      var won = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (c) =>
-                                  widget.challengeScreens[challenge.name](
-                                      challenge)));
-                      sw.stop();
-                      print("Challenge result: $won");
-                      if (won == true) {
-                        animate();
-                        challenge.completed = true;
-                      }
-                      challenge.score = challenge.score + sw.elapsed.inSeconds;
-                      widget.updateChallengeProgress(challenge);
-                    },
-                    child: Text(
-                      showCode && index < 4
-                          ? passcode.substring(index, index + 1)
-                          : challenge.name,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .display2,
-                    )))))
-        ?.values
-        ?.toList();
-    var _allTiles = _challengeTiles;
+            buildTile(challenge, context, index)))
+        .values
+        .toList();
+    List<Widget> _menuTiles = [
+      InkWell(
+          onTap: () async {
+            await ChallengeProgressDB.resetDb();
+            RestartWidget.restartApp(context);
+          },
+          child: Icon(Icons.refresh))
+    ];
+    List<Widget> _allTiles = _challengeTiles;
+    _allTiles.addAll(_menuTiles);
 
     return Scaffold(
       body: Column(
@@ -117,5 +98,39 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
+  }
+
+  Widget buildTile(Challenge challenge, BuildContext context, int index) {
+    return ColourAnimatedTile(
+        animate: challenge.completed,
+        buildChild: (animate) =>
+            InkWell(
+                onTap: () async {
+                  var sw = Stopwatch();
+                  sw.start();
+                  var won = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (c) =>
+                              widget.challengeScreens[challenge.name](
+                                  challenge)));
+                  sw.stop();
+                  print("Challenge result: $won");
+                  if (won == true) {
+                    animate();
+                    challenge.completed = true;
+                  }
+                  challenge.score = challenge.score + sw.elapsed.inSeconds;
+                  widget.updateChallengeProgress(challenge);
+                },
+                child: Text(
+                  showCode && index < 4
+                      ? passcode.substring(index, index + 1)
+                      : challenge.name,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .display2,
+                )));
   }
 }

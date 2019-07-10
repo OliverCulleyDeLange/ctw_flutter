@@ -21,7 +21,13 @@ class AppState {
   }
 
   getChallengeState(String challengeName, String stateName) {
-    return json.decode(challenges[challengeName].state)[stateName];
+    try {
+      return json.decode(challenges[challengeName].state)[stateName];
+    } catch (e) {
+      debugPrint(
+          "Couldn't get [$stateName] state from [$challengeName] challenge");
+      return null;
+    }
   }
 
   void updateChallengeProgress(Challenge challenge) async {}
