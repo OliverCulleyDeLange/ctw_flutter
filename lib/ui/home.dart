@@ -38,15 +38,27 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _gridRowSize = 4;
+  bool showCode = false;
+  String passcode;
+
+  @override
+  void initState() {
+    showCode = widget.appState.showCode;
+    passcode = widget.appState.passcode;
+  }
 
   @override
   Widget build(BuildContext context) {
-    var _challengeTiles = widget.appState.challenges
-        ?.map((challenge) =>
-        ColourAnimatedTile(
-            animate: challenge.completed,
-            buildChild: (animate) =>
-                InkWell(
+    var _challengeTiles = widget.appState.challenges?.values
+        ?.toList()
+        ?.asMap()
+        ?.map((index, challenge) =>
+        MapEntry(
+            index,
+            ColourAnimatedTile(
+                animate: challenge.completed,
+                buildChild: (animate) =>
+                    InkWell(
                     onTap: () async {
                       var sw = Stopwatch();
                       sw.start();
@@ -54,9 +66,8 @@ class _HomeState extends State<Home> {
                           context,
                           MaterialPageRoute(
                               builder: (c) =>
-                                  widget
-                                      .challengeScreens[challenge.name]
-                                    (challenge)));
+                                  widget.challengeScreens[challenge.name](
+                                      challenge)));
                       sw.stop();
                       print("Challenge result: $won");
                       if (won == true) {
@@ -67,12 +78,15 @@ class _HomeState extends State<Home> {
                       widget.updateChallengeProgress(challenge);
                     },
                     child: Text(
-                      challenge.name,
+                      showCode && index < 4
+                          ? passcode.substring(index, index + 1)
+                          : challenge.name,
                       style: Theme
                           .of(context)
                           .textTheme
                           .display2,
-                    ))))
+                    )))))
+        ?.values
         ?.toList();
     var _allTiles = _challengeTiles;
 

@@ -22,8 +22,9 @@ class _MyAppState extends State<MyApp> {
     challengeProgressRepository.loadAll().then((challengeProgress) {
       setState(() {
         appState = AppState(
-            challenges:
-            challengeProgress.map((c) => Challenge.fromEntity(c)).toList());
+            challenges: challengeProgress
+                .asMap()
+                .map((i, c) => MapEntry(c.name, Challenge.fromEntity(c))));
       });
     });
   }

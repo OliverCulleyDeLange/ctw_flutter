@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ctw_flutter/domain/challenge.dart';
 import 'package:flutter/material.dart';
 
@@ -6,10 +8,21 @@ typedef BuildDynamicTitledTile = Widget Function(
 typedef BuildTile = Widget Function(BuildContext context);
 
 class AppState {
-  List<Challenge> challenges;
-  bool showCode = false;
+  Map<String, Challenge> challenges;
 
-  AppState({this.challenges, this.showCode});
+  AppState({this.challenges});
+
+  get showCode {
+    return getChallengeState("passcode", "counter") == 0;
+  }
+
+  get passcode {
+    return getChallengeState("passcode", "passcode");
+  }
+
+  getChallengeState(String challengeName, String stateName) {
+    return json.decode(challenges[challengeName].state)[stateName];
+  }
 
   void updateChallengeProgress(Challenge challenge) async {}
 }
