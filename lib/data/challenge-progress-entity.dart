@@ -8,13 +8,10 @@ class ChallengeProgressEntity {
   final int score;
   final bool completed;
   final String name;
+  final String state;
 
-  ChallengeProgressEntity({
-    this.id,
-    this.score,
-    this.completed,
-    this.name,
-  });
+  ChallengeProgressEntity(
+      {this.id, this.score, this.completed, this.name, this.state});
 
   factory ChallengeProgressEntity.fromJson(String str) =>
       ChallengeProgressEntity.fromMap(json.decode(str));
@@ -27,6 +24,7 @@ class ChallengeProgressEntity {
         completed: json["completed"] == 1,
         score: json["score"],
         name: json["name"],
+        state: json["state"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -34,12 +32,11 @@ class ChallengeProgressEntity {
         "completed": completed,
     "score": score,
         "name": name,
+    "state": state,
       };
 
   @override
   String toString() {
-    return "[$id : $name] score: $score, completed: $completed";
+    return "[$id : $name] score: $score, completed: $completed, state: $state";
   }
-
-
 }

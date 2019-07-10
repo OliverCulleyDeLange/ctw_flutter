@@ -1,12 +1,36 @@
-import 'package:ctw_flutter/domain/home-models.dart';
+import 'package:ctw_flutter/domain/app-state.dart';
+import 'package:ctw_flutter/domain/challenge.dart';
+import 'package:ctw_flutter/ui/challenges/device/rotate.dart';
+import 'package:ctw_flutter/ui/challenges/device/shake.dart';
+import 'package:ctw_flutter/ui/challenges/gesture/double-tap.dart';
+import 'package:ctw_flutter/ui/challenges/gesture/drag-and-drop.dart';
+import 'package:ctw_flutter/ui/challenges/gesture/long-press.dart';
+import 'package:ctw_flutter/ui/challenges/gesture/single-tap.dart';
+import 'package:ctw_flutter/ui/challenges/input/local-auth.dart';
+import 'package:ctw_flutter/ui/challenges/input/passcode.dart';
 import 'package:ctw_flutter/ui/widgets/tile.dart';
 import 'package:flutter/material.dart';
+
+typedef GetChallengeScreen = Widget Function(Challenge challenge);
 
 class Home extends StatefulWidget {
   final AppState appState;
   final Function updateChallengeProgress;
 
-  Home({this.appState, this.updateChallengeProgress});
+  Map<String, GetChallengeScreen> challengeScreens;
+
+  Home({this.appState, this.updateChallengeProgress}) {
+    this.challengeScreens = {
+      "single-tap": (challenge) => SingleTap(),
+      "double-tap": (challenge) => DoubleTap(),
+      "long-press": (challenge) => LongPress(),
+      "drag-and-drop": (challenge) => DragAndDrop(),
+      "rotate": (challenge) => Rotate(),
+      "shake": (challenge) => Shake(),
+      "local-auth": (challenge) => LocalAuth(),
+      "passcode": (challenge) => Passcode(challenge, updateChallengeProgress),
+    };
+  }
 
   @override
   _HomeState createState() => _HomeState();
@@ -26,8 +50,13 @@ class _HomeState extends State<Home> {
                     onTap: () async {
                       var sw = Stopwatch();
                       sw.start();
-                      var won = await Navigator.pushNamed(
-                          context, challenge.name);
+                      var won = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (c) =>
+                                  widget
+                                      .challengeScreens[challenge.name]
+                                    (challenge)));
                       sw.stop();
                       print("Challenge result: $won");
                       if (won == true) {

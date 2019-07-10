@@ -1,15 +1,7 @@
 import 'package:ctw_flutter/data/challenge-progress-repository.dart';
+import 'package:ctw_flutter/domain/app-state.dart';
 import 'package:ctw_flutter/domain/challenge.dart';
-import 'package:ctw_flutter/domain/home-models.dart';
 import 'package:ctw_flutter/theme.dart';
-import 'package:ctw_flutter/ui/challenges/device/rotate.dart';
-import 'package:ctw_flutter/ui/challenges/device/shake.dart';
-import 'package:ctw_flutter/ui/challenges/gesture/double-tap.dart';
-import 'package:ctw_flutter/ui/challenges/gesture/drag-and-drop.dart';
-import 'package:ctw_flutter/ui/challenges/gesture/long-press.dart';
-import 'package:ctw_flutter/ui/challenges/gesture/single-tap.dart';
-import 'package:ctw_flutter/ui/challenges/input/local-auth.dart';
-import 'package:ctw_flutter/ui/challenges/input/passcode.dart';
 import 'package:ctw_flutter/ui/home.dart';
 import 'package:ctw_flutter/ui/widgets/restart.dart';
 import 'package:flutter/material.dart';
@@ -47,14 +39,6 @@ class _MyAppState extends State<MyApp> {
               appState: appState,
               updateChallengeProgress: updateChallengeProgress,
             ),
-        "single-tap": (c) => SingleTap(),
-        "double-tap": (c) => DoubleTap(),
-        "long-press": (c) => LongPress(),
-        "drag-and-drop": (c) => DragAndDrop(),
-        "rotate": (c) => Rotate(),
-        "shake": (c) => Shake(),
-        "local-auth": (c) => LocalAuth(),
-        "passcode": (c) => Passcode(),
       },
     ));
   }

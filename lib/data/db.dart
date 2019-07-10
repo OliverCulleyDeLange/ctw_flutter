@@ -36,15 +36,16 @@ class ChallengeProgressDB {
               "id INTEGER PRIMARY KEY,"
               "name TEXT,"
               "score INTEGER,"
-              "completed INTEGER"
+              "completed INTEGER,"
+              "state TEXT"
               ")");
           await db.execute(
               "CREATE UNIQUE INDEX $challengeNameIndexName on $table (name)");
 
           debugPrint("Initialising DB with all challenge names");
-          for (String c in CHALLENGE_NAMES) {
+          for (String challengeName in CHALLENGE_NAMES) {
             var entity =
-            ChallengeProgressEntity(score: 0, completed: false, name: c);
+            Challenge(challengeName).toEntity();
             await db.insert(table, entity.toMap(),
                 conflictAlgorithm: ConflictAlgorithm.ignore);
           }
