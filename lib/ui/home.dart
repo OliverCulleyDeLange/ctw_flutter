@@ -40,14 +40,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _gridRowSize = 4;
-  bool showCode = false;
-  String passcode;
-
-  @override
-  void initState() {
-    showCode = widget.appState.showCode;
-    passcode = widget.appState.passcode;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,8 +116,8 @@ class _HomeState extends State<Home> {
                   widget.updateChallengeProgress(challenge);
                 },
                 child: Text(
-                  showCode && index < 4
-                      ? passcode.substring(index, index + 1)
+                  widget.appState.showCode && index < 4
+                      ? widget.appState.passcode.substring(index, index + 1)
                       : challenge.name,
                   style: Theme
                       .of(context)

@@ -13,19 +13,20 @@ class AppState {
   AppState({this.challenges});
 
   get showCode {
-    return getChallengeState("passcode", "counter") == 0;
+    var state = getChallengeState("passcode");
+    return state["counter"] == 0 && !challenges["passcode"].completed;
   }
 
   get passcode {
-    return getChallengeState("passcode", "passcode");
+    return getChallengeState("passcode")["passcode"];
   }
 
-  getChallengeState(String challengeName, String stateName) {
+  getChallengeState(String challengeName) {
     try {
-      return json.decode(challenges[challengeName].state)[stateName];
+      return json.decode(challenges[challengeName].state);
     } catch (e) {
       debugPrint(
-          "Couldn't get [$stateName] state from [$challengeName] challenge");
+          "Couldn't get state from [$challengeName] challenge");
       return null;
     }
   }
