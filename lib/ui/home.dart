@@ -1,5 +1,7 @@
 import 'package:ctw_flutter/data/db.dart';
+import 'package:ctw_flutter/domain/app-state.dart';
 import 'package:ctw_flutter/domain/challenge.dart';
+import 'package:ctw_flutter/domain/scoring.dart';
 import 'package:ctw_flutter/ui/challenges/device/rotate.dart';
 import 'package:ctw_flutter/ui/challenges/device/shake.dart';
 import 'package:ctw_flutter/ui/challenges/gesture/double-tap.dart';
@@ -9,6 +11,7 @@ import 'package:ctw_flutter/ui/challenges/gesture/single-tap.dart';
 import 'package:ctw_flutter/ui/challenges/input/local-auth.dart';
 import 'package:ctw_flutter/ui/challenges/input/passcode.dart';
 import 'package:ctw_flutter/ui/widgets/restart.dart';
+import 'package:ctw_flutter/ui/widgets/success-popup.dart';
 import 'package:ctw_flutter/ui/widgets/tile.dart';
 import 'package:flutter/material.dart';
 
@@ -42,6 +45,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _gridRowSize = 4;
+  bool showSuccessPopup = false;
+  StarScore _starScore = StarScore(2, 3);
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +54,39 @@ class _HomeState extends State<Home> {
     final state = container.state;
     debugPrint(
         "Building Home screen: ${state.challenges?.entries?.map((e) => "${e
-            .value
-            .name}:${e.value.completed}")?.reduce((val, elem) =>
+            .value.name}:${e.value.completed}")?.reduce((val, elem) =>
         val + ", $elem")}");
 
+    return Stack(alignment: Alignment.center, children: <Widget>[
+      getHomeScreen(state, context),
+      showSuccessPopup ? SuccessPopup(_starScore) : Container(),
+    ]);
+  }
+
+  Scaffold getHomeScreen(AppState state, BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: <Widget>[
+          Expanded(child: getChallengeTiles(state, context)),
+          Slider(
+            value: _gridRowSize.toDouble(),
+            onChanged: (double value) {
+              var round = value.round();
+              if (_gridRowSize != round) {
+                setState(() {
+                  _gridRowSize = round;
+                });
+              }
+            },
+            max: 5,
+            min: 3,
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget getChallengeTiles(AppState state, BuildContext context) {
     List<Widget> _challengeTiles = (state.challenges ?? {})
         .values
         .toList()
@@ -96,30 +130,8 @@ class _HomeState extends State<Home> {
     List<Widget> _allTiles = _challengeTiles;
     _allTiles.addAll(_menuTiles);
 
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: _allTiles != null
-                ? GridView.count(
-                crossAxisCount: _gridRowSize, children: _allTiles)
-                : Container(),
-          ),
-          Slider(
-            value: _gridRowSize.toDouble(),
-            onChanged: (double value) {
-              var round = value.round();
-              if (_gridRowSize != round) {
-                setState(() {
-                  _gridRowSize = round;
-                });
-              }
-            },
-            max: 5,
-            min: 3,
-          )
-        ],
-      ),
-    );
+    return _allTiles != null
+        ? GridView.count(crossAxisCount: _gridRowSize, children: _allTiles)
+        : Container();
   }
 }
