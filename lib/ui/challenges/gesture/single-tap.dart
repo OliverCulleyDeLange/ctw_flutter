@@ -3,19 +3,17 @@ import 'package:flutter/material.dart';
 
 class SingleTap extends StatelessWidget {
   Widget build(BuildContext context) {
-    return BaseChallenge(getChallengeWidget: (completed) {
-      return GestureDetector(
-        onTap: () {
-          completed(context);
-        },
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Icon(Icons.touch_app),
-            Icon(Icons.looks_one),
-          ],
-        ),
-      );
-    });
+    return GestureDetector(
+      onTap: () {
+        BaseChallenge.of(context).complete();
+      },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Icon(Icons.touch_app),
+          Icon(Icons.looks_one),
+        ],
+      ),
+    );
   }
 }

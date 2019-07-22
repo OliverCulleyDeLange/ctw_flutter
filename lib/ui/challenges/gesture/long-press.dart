@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 class LongPress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BaseChallenge(getChallengeWidget: (complete) {
       return GestureDetector(
         onLongPress: () {
-          complete(context);
+          BaseChallenge.of(context).complete();
         },
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -17,6 +16,5 @@ class LongPress extends StatelessWidget {
           ],
         ),
       );
-    });
   }
 }

@@ -43,6 +43,7 @@ class _ShakeState extends State<Shake> {
           setState(() {
             lastShakeTime = curTime;
           });
+          BaseChallenge.of(context).complete();
           accelerometer.cancel();
         }
       }
@@ -57,16 +58,12 @@ class _ShakeState extends State<Shake> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseChallenge(
-        complete: lastShakeTime != 0,
-        getChallengeWidget: (complete) {
-          return Container(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Icon(FontAwesomeIcons.handshake),
-            ],
-          ));
-        });
+    return Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Icon(FontAwesomeIcons.handshake),
+          ],
+        ));
   }
 }

@@ -31,21 +31,21 @@ class _ColourAnimatedTileState extends State<ColourAnimatedTile>
       begin: Colors.deepOrange,
       end: Colors.green,
     ).animate(_controller);
-    if (widget.animate) {
-      _controller.forward();
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.animate) {
+      _controller.forward();
+    }
     return AnimatedBuilder(
-          animation: _colorTween,
-          builder: (context, child) {
-            return Card(
-              color: _colorTween.value,
-                child: widget.buildChild(animate)
-            );
-          },
+      animation: _colorTween,
+      builder: (context, child) {
+        return Card(
+            color: _colorTween.value,
+            child: widget.buildChild(animate)
+        );
+      },
     );
   }
 }
