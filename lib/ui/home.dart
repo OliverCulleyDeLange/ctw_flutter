@@ -48,8 +48,9 @@ class _HomeState extends State<Home> {
     final container = StateContainer.of(context);
     final state = container.state;
     debugPrint(
-        "Building Home screen: ${state.challenges.entries.map((e) => "${e.value
-            .name}:${e.value.completed}").reduce((val, elem) =>
+        "Building Home screen: ${state.challenges?.entries?.map((e) => "${e
+            .value
+            .name}:${e.value.completed}")?.reduce((val, elem) =>
         val + ", $elem")}");
 
     List<Widget> _challengeTiles = (state.challenges ?? {})
