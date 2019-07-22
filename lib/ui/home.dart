@@ -21,24 +21,6 @@ import 'challenges/base-challenge.dart';
 typedef GetChallengeScreen = Widget Function(Challenge challenge);
 
 class Home extends StatefulWidget {
-  final Map<String, GetChallengeScreen> challengeScreens = {
-    "single-tap": wrapChallenge(SingleTap()),
-    "double-tap": wrapChallenge(DoubleTap()),
-    "long-press": wrapChallenge(LongPress()),
-    "drag-and-drop": wrapChallenge(DragAndDrop()),
-    "rotate": wrapChallenge(Rotate()),
-    "shake": wrapChallenge(Shake()),
-    "local-auth": wrapChallenge(LocalAuth()),
-    "passcode": wrapChallenge(Passcode()),
-  };
-
-  static wrapChallenge(challengeScreen) =>
-          (challenge) =>
-          BaseChallenge(
-            challenge: challenge,
-            child: challengeScreen,
-          );
-
   @override
   _HomeState createState() => _HomeState();
 }
@@ -86,7 +68,25 @@ class _HomeState extends State<Home> {
     );
   }
 
+  wrapChallenge(challengeScreen) =>
+          (challenge) =>
+          BaseChallenge(
+            challenge: challenge,
+            child: challengeScreen,
+          );
+
   Widget getChallengeTiles(AppState state, BuildContext context) {
+    final Map<String, GetChallengeScreen> challengeScreens = {
+      "single-tap": wrapChallenge(SingleTap()),
+      "double-tap": wrapChallenge(DoubleTap()),
+      "long-press": wrapChallenge(LongPress()),
+      "drag-and-drop": wrapChallenge(DragAndDrop()),
+      "rotate": wrapChallenge(Rotate()),
+      "shake": wrapChallenge(Shake()),
+      "local-auth": wrapChallenge(LocalAuth()),
+      "passcode": wrapChallenge(Passcode()),
+    };
+
     List<Widget> _challengeTiles = (state.challenges ?? {})
         .values
         .toList()
@@ -94,27 +94,14 @@ class _HomeState extends State<Home> {
         .map((index, challenge) =>
         MapEntry(
             index,
-            ColourAnimatedTile(
-                animate: challenge.completed,
-                buildChild: (animate) =>
-                    InkWell(
-                        onTap: () async {
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (c) =>
-                                      widget.challengeScreens[challenge.name](
-                                          challenge)));
-                        },
-                        child: Text(
-                          state.showCode && index < 4
-                              ? state.passcode.substring(index, index + 1)
-                              : challenge.id.toString(),
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .display2,
-                        ))) as Widget))
+            getTile(
+              context,
+              state,
+              index,
+              challenge.id.toString(),
+              challenge,
+              challengeScreens[challenge.name](challenge),
+            )))
         .values
         .toList();
 
@@ -133,5 +120,33 @@ class _HomeState extends State<Home> {
     return _allTiles != null
         ? GridView.count(crossAxisCount: _gridRowSize, children: _allTiles)
         : Container();
+  }
+
+  Widget getTile(BuildContext context,
+      AppState state,
+      int index,
+      String tileTitle,
+      Challenge challenge,
+      Widget challengeScreen,) {
+    return ColourAnimatedTile(
+        animate: challenge.completed,
+        buildChild: (animate) =>
+            InkWell(
+                onTap: () async {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (c) =>
+                          challengeScreen));
+                },
+                child: Text(
+                  state.showCode && index < 4
+                      ? state.passcode.substring(index, index + 1)
+                      : tileTitle,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .display2,
+                )));
   }
 }

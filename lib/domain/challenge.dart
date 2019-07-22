@@ -12,7 +12,6 @@ const List<String> CHALLENGE_NAMES = [
 ];
 
 class Challenge {
-  // Make ENUM?
   int id;
   String name;
   int score;
