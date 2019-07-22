@@ -1,19 +1,6 @@
-import 'dart:math';
-
 import 'package:ctw_flutter/domain/scoring.dart';
 import 'package:ctw_flutter/theme.dart';
 import 'package:flutter/material.dart';
-
-final successMessages = [
-  "Too Easy",
-  "Nice One",
-  "Well Done",
-  "Sweeeet",
-  "Yeah",
-  "Awesome",
-  "Siiiiick",
-  "Yh kwl",
-];
 
 class SuccessPopup extends StatelessWidget {
   final StarScore starScore;
@@ -40,13 +27,6 @@ class SuccessPopup extends StatelessWidget {
             )), child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Text(
-            successMessages.elementAt(Random().nextInt(successMessages.length)),
-            style: Theme
-                .of(context)
-                .textTheme
-                .display3,
-          ),
           Stars(starScore),
         ]));
   }

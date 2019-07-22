@@ -6,18 +6,13 @@ import 'package:flutter/material.dart';
 
 import '../../../state-container.dart';
 
-class Passcode extends StatefulWidget {
-  @override
-  _PasscodeState createState() => _PasscodeState();
-}
-
-class _PasscodeState extends State<Passcode> {
+class Passcode extends StatelessWidget {
 
   decrementCounter(challenge) {
     var stateJson = json.decode(challenge.state);
     var counter = stateJson['counter'];
     if (counter == null) {
-      counter = 5;
+      counter = 1;
     } else if (counter > 0) {
       counter--;
     }
