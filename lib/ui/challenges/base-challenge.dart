@@ -49,16 +49,13 @@ class _BaseChallengeState extends State<BaseChallenge> {
     StateContainer.of(context).updateChallengeProgress(widget.challenge,
         complete: true,
         score: widget.challenge.score + _stopwatch.elapsed.inSeconds);
+    Future.delayed(Duration(seconds: 1), () {
+      Navigator.pop(context);
+    });
   }
 
   Widget build(BuildContext context) {
     debugPrint("Building BaseChallenge { completed:$_completed }");
-
-    if (_completed) {
-      Future.delayed(Duration(seconds: 1), () {
-        Navigator.pop(context);
-      });
-    }
     return _ChallengeState(
       data: this,
       child: Scaffold(

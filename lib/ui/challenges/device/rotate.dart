@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../base-challenge.dart';
 
@@ -20,7 +21,8 @@ class _RotateState extends State<Rotate> {
     } else if (MediaQuery
         .of(context)
         .orientation != initOrientation) {
-      BaseChallenge.of(context).complete();
+      SchedulerBinding.instance
+          .addPostFrameCallback((time) => BaseChallenge.of(context).complete());
     }
     return Container(
         child: Column(
