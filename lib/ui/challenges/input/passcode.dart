@@ -1,27 +1,11 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:code_input/code_input.dart';
 import 'package:ctw_flutter/ui/challenges/base-challenge.dart';
 import 'package:flutter/material.dart';
 
 import '../../../state-container.dart';
-
-class CustomAnimatedIcon extends AnimatedWidget {
-  CustomAnimatedIcon({Key key, Animation<double> animation})
-      : super(key: key, listenable: animation);
-
-  Widget build(BuildContext context) {
-    final Animation<double> animation = listenable;
-    return Center(
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
-        height: animation.value,
-        width: animation.value,
-        child: FlutterLogo(),
-      ),
-    );
-  }
-}
 
 class Passcode extends StatefulWidget {
   @override
@@ -30,19 +14,9 @@ class Passcode extends StatefulWidget {
 
 class _PasscodeState extends State<Passcode>
     with SingleTickerProviderStateMixin {
-  bool attempted;
+  var _inputKey = Key("input");
+  bool _attempted = false;
 
-  Animation<double> animation;
-  AnimationController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 2));
-    animation = Tween<double>(begin: 0, end: 300).animate(controller);
-    controller.forward();
-  }
 
   decrementCounter(challenge) {
     var stateJson = json.decode(challenge.state);
@@ -72,8 +46,20 @@ class _PasscodeState extends State<Passcode>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            CustomAnimatedIcon(animation: animation,),
+            AnimatedCrossFade(
+              duration: const Duration(milliseconds: 100),
+              firstChild: const Icon(
+                Icons.vpn_key,
+              ),
+              secondChild: const Icon(
+                Icons.cancel,
+              ),
+              crossFadeState: !_attempted
+                  ? CrossFadeState.showFirst
+                  : CrossFadeState.showSecond,
+            ),
             CodeInput(
+              key: _inputKey,
               length: 4,
               keyboardType: TextInputType.number,
               builder: CodeInputBuilders.lightCircle(),
@@ -83,22 +69,23 @@ class _PasscodeState extends State<Passcode>
                 } else {
                   BaseChallenge.of(context).attempt(1);
                   setState(() {
-                    attempted = true;
+                    _attempted = true;
+                    Future.delayed(Duration(seconds: 1), () {
+                      setState(() {
+                        _attempted = false;
+                        _inputKey = Key(Random().nextDouble().toString());
+                      });
+                    });
                   });
                 }
               },
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
-              children: <Widget>[Icon(Icons.lock_open), Text(counter.toString())],
+              children: <Widget>[Icon(Icons.lock_open), Text(counter.toString())
+              ],
         )
       ],
     ));
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
   }
 }
