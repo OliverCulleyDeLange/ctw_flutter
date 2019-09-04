@@ -31,9 +31,9 @@ class AppState {
   }
 
   get score =>
-      challenges.values
-          .map((c) => c.score)
-          .fold(0, (p, e) => p + e);
+      challenges?.values
+          ?.map((c) => c.score)
+          ?.fold(0, (p, e) => p + e);
 
   _getChallengeState(String challengeName) {
     try {

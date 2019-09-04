@@ -10,11 +10,9 @@ A Flutter game app.
 - No words, all emoji / icons / images (no i18n or string management)
 
 ### Challenges (and how you cheat)
-- Long press tile
 - Click X times
 - Answer hidden in image so you have to tilt phone
 - Left hand or right hand dialog box - only one shot (watch ad to try again)
-- One challenge tile you can't just tap on, you need to press and hold it / double tap
 - Battery level
 
 - Quiz questions / Riddles - (google the answer)

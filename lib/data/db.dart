@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:ctw_flutter/data/challenge-progress-entity.dart';
 import 'package:ctw_flutter/domain/challenge.dart';
+import 'package:ctw_flutter/ui/challenges/challenge-screens.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -52,7 +53,8 @@ class ChallengeProgressDB {
         "CREATE UNIQUE INDEX $challengeNameIndexName on $table (name)");
 
     debugPrint("Initialising DB with all challenge names");
-    for (String challengeName in CHALLENGE_NAMES) {
+
+    for (String challengeName in challengeScreens.keys) {
       var entity = Challenge(challengeName).toEntity();
       await db.insert(table, entity.toMap(),
           conflictAlgorithm: ConflictAlgorithm.ignore);

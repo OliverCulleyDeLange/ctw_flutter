@@ -1,16 +1,5 @@
 import 'package:ctw_flutter/data/challenge-progress-entity.dart';
 
-const List<String> CHALLENGE_NAMES = [
-  "single-tap",
-  "double-tap",
-  "long-press",
-  "drag-and-drop",
-  "rotate",
-  "shake",
-  "local-auth",
-  "passcode"
-];
-
 class Challenge {
   int id;
   String name;

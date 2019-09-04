@@ -2,23 +2,13 @@ import 'package:ctw_flutter/data/db.dart';
 import 'package:ctw_flutter/domain/app-state.dart';
 import 'package:ctw_flutter/domain/challenge.dart';
 import 'package:ctw_flutter/domain/scoring.dart';
-import 'package:ctw_flutter/ui/challenges/device/rotate.dart';
-import 'package:ctw_flutter/ui/challenges/device/shake.dart';
-import 'package:ctw_flutter/ui/challenges/gesture/double-tap.dart';
-import 'package:ctw_flutter/ui/challenges/gesture/drag-and-drop.dart';
-import 'package:ctw_flutter/ui/challenges/gesture/long-press.dart';
-import 'package:ctw_flutter/ui/challenges/gesture/single-tap.dart';
-import 'package:ctw_flutter/ui/challenges/input/local-auth.dart';
-import 'package:ctw_flutter/ui/challenges/input/passcode.dart';
 import 'package:ctw_flutter/ui/widgets/restart.dart';
 import 'package:ctw_flutter/ui/widgets/success-popup.dart';
 import 'package:ctw_flutter/ui/widgets/tile.dart';
 import 'package:flutter/material.dart';
 
 import '../state-container.dart';
-import 'challenges/base-challenge.dart';
-
-typedef GetChallengeScreen = Widget Function(Challenge challenge);
+import 'challenges/challenge-screens.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -68,24 +58,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  wrapChallenge(challengeScreen) =>
-          (challenge) =>
-          BaseChallenge(
-            challenge: challenge,
-            child: challengeScreen,
-          );
-
   Widget getChallengeTiles(AppState state, BuildContext context) {
-    final Map<String, GetChallengeScreen> challengeScreens = {
-      "single-tap": wrapChallenge(SingleTap()),
-      "double-tap": wrapChallenge(DoubleTap()),
-      "long-press": wrapChallenge(LongPress()),
-      "drag-and-drop": wrapChallenge(DragAndDrop()),
-      "rotate": wrapChallenge(Rotate()),
-      "shake": wrapChallenge(Shake()),
-      "local-auth": wrapChallenge(LocalAuth()),
-      "passcode": wrapChallenge(Passcode()),
-    };
 
     List<Widget> _challengeTiles = (state.challenges ?? {})
         .values
