@@ -6,6 +6,23 @@ import 'package:flutter/material.dart';
 
 import '../../../state-container.dart';
 
+class CustomAnimatedIcon extends AnimatedWidget {
+  CustomAnimatedIcon({Key key, Animation<double> animation})
+      : super(key: key, listenable: animation);
+
+  Widget build(BuildContext context) {
+    final Animation<double> animation = listenable;
+    return Center(
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 10),
+        height: animation.value,
+        width: animation.value,
+        child: FlutterLogo(),
+      ),
+    );
+  }
+}
+
 class Passcode extends StatefulWidget {
   @override
   _PasscodeState createState() => _PasscodeState();
@@ -15,7 +32,7 @@ class _PasscodeState extends State<Passcode>
     with SingleTickerProviderStateMixin {
   bool attempted;
 
-//  Animation<double> animation;
+  Animation<double> animation;
   AnimationController controller;
 
   @override
@@ -23,17 +40,7 @@ class _PasscodeState extends State<Passcode>
     super.initState();
     controller =
         AnimationController(vsync: this, duration: const Duration(seconds: 2));
-    controller.addListener(() {
-      setState(() {
-        // The state that has changed here is the animation object’s value.
-      });
-    });
-//    animation = Tween<double>(begin: 0, end: 300).animate(controller)
-//        ..addListener(() {
-//          setState(() {
-//            // The state that has changed here is the animation object’s value.
-//          });
-//        });
+    animation = Tween<double>(begin: 0, end: 300).animate(controller);
     controller.forward();
   }
 
@@ -65,10 +72,7 @@ class _PasscodeState extends State<Passcode>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Icon(
-              Icons.vpn_key,
-              size: controller.value * 24,
-            ),
+            CustomAnimatedIcon(animation: animation,),
             CodeInput(
               length: 4,
               keyboardType: TextInputType.number,
@@ -86,11 +90,10 @@ class _PasscodeState extends State<Passcode>
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
-              children: <Widget>[Icon(Icons.lock_open), Text(counter.toString())
-              ],
-            )
-          ],
-        ));
+              children: <Widget>[Icon(Icons.lock_open), Text(counter.toString())],
+        )
+      ],
+    ));
   }
 
   @override
