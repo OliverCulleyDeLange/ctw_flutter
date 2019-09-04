@@ -2,6 +2,10 @@
 
 A Flutter game app.
 
+### TODO
+-
+- Leader board tile
+
 ### USPs:
 - No words, all emoji / icons / images (no i18n or string management)
 

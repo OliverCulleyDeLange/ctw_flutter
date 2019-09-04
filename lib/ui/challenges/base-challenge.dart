@@ -36,6 +36,15 @@ class _BaseChallengeState extends State<BaseChallenge> {
     _stopwatch.start();
   }
 
+  attempt(int scoreToAdd) async {
+    debugPrint(
+        "Challenge attempted: ${widget.challenge
+            .name}. Current time: ${_stopwatch.elapsed
+            .inSeconds} seconds");
+    StateContainer.of(context).updateChallengeProgress(widget.challenge,
+        score: widget.challenge.score + scoreToAdd);
+  }
+
   complete() async {
     _stopwatch.stop();
     debugPrint(
