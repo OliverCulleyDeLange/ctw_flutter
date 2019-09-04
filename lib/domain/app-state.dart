@@ -30,14 +30,17 @@ class AppState {
     return passcode;
   }
 
+  get score =>
+      challenges.values
+          .map((c) => c.score)
+          .fold(0, (p, e) => p + e);
+
   _getChallengeState(String challengeName) {
     try {
       return json.decode(challenges[challengeName].state);
     } catch (e) {
-      debugPrint(
-          "Couldn't get state from [$challengeName] challenge");
+      debugPrint("Couldn't get state from [$challengeName] challenge");
       return null;
     }
   }
-
 }

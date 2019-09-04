@@ -111,7 +111,8 @@ class _HomeState extends State<Home> {
             await ChallengeProgressDB.resetDb();
             RestartWidget.restartApp(context);
           },
-          child: Icon(Icons.refresh))
+          child: Icon(Icons.refresh)),
+      Center(child: Text(state.score.toString(), textScaleFactor: 2,))
     ];
 
     List<Widget> _allTiles = _challengeTiles;
