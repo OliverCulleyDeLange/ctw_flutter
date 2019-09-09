@@ -29,6 +29,7 @@ dependencies:
   sqflite: ^1.1.6
   path: ^1.6.2
   flutter_stetho: ^0.2.2
+  auto_size_text: ^2.1.0
 
 dev_dependencies:
   test: ^1.6.1

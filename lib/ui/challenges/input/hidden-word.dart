@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:code_input/code_input.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,8 @@ class _HiddenWordState extends State<HiddenWord> {
         DecoratedBox(
           child: Container(
             padding: EdgeInsets.all(5),
-            child: Text(hiddenWord.toString(),
+            child: AutoSizeText(hiddenWord.toString(),
+                maxLines: 1,
                 style: TextStyle(
                     color: Color.fromARGB(alpha, 0, 0, 0),
                     fontSize: 100,
@@ -52,7 +54,7 @@ class _HiddenWordState extends State<HiddenWord> {
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.only(left: 20),
-                  child: LongPressDraggable(
+                  child: Draggable(
                     onDragEnd: (d) {
                       var direction = d.velocity.pixelsPerSecond.direction;
                       var upVelocity = d.velocity.pixelsPerSecond.dy;
@@ -62,7 +64,7 @@ class _HiddenWordState extends State<HiddenWord> {
                           direction > -1 &&
                           direction < 0.5) {
                         var newAlpha =
-                            ((min(20000, upVelocity.abs()) / 20000) * 10)
+                        ((min(10000, upVelocity.abs()) / 10000) * 10)
                                 .toInt();
                         debugPrint(newAlpha.toString());
                         setState(() {
