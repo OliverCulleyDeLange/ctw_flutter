@@ -1,16 +1,17 @@
 import 'package:ctw_flutter/domain/challenge.dart';
-import 'package:ctw_flutter/ui/challenges/device/rotate.dart';
-import 'package:ctw_flutter/ui/challenges/device/shake.dart';
-import 'package:ctw_flutter/ui/challenges/gesture/double-tap.dart';
-import 'package:ctw_flutter/ui/challenges/gesture/drag-and-drop.dart';
-import 'package:ctw_flutter/ui/challenges/gesture/long-press.dart';
-import 'package:ctw_flutter/ui/challenges/gesture/single-tap.dart';
-import 'package:ctw_flutter/ui/challenges/input/local-auth.dart';
-import 'package:ctw_flutter/ui/challenges/input/passcode.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'base-challenge.dart';
+import 'device/rotate.dart';
+import 'device/shake.dart';
+import 'gesture/double-tap.dart';
+import 'gesture/drag-and-drop.dart';
+import 'gesture/long-press.dart';
+import 'gesture/single-tap.dart';
+import 'gesture/sort.dart';
 import 'input/hidden-word.dart';
+import 'input/local-auth.dart';
+import 'input/passcode.dart';
 
 GetChallengeScreen wrapChallenge(challengeScreen) =>
     (challenge) => BaseChallenge(
@@ -30,4 +31,5 @@ final Map<String, GetChallengeScreen> challengeScreens = {
   "local-auth": wrapChallenge(LocalAuth()),
   "passcode": wrapChallenge(Passcode()),
   "hidden-word": wrapChallenge(HiddenWord()),
+  "sort": wrapChallenge(Sort()),
 };

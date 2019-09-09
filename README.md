@@ -3,18 +3,23 @@
 A Flutter game app.
 
 ### TODO
--
-- Leader board tile
+- Clues
+- Watch ad for clue
 
 ### USPs:
 - No words, all emoji / icons / images (no i18n or string management)
 
 ### Challenges (and how you cheat)
 - Click X times
-- Answer hidden in image so you have to tilt phone
 - Left hand or right hand dialog box - only one shot (watch ad to try again)
 - Battery level
-
+-
+- Rhyming words
+- Kids block toy - drag and drop
+- Make a shape / image out of a tool box of lines / shapes
+- Drawing pad canvas thing
+- Spot the difference
+- Word search
 - Quiz questions / Riddles - (google the answer)
 - Be in a location - (fake GPS)
 - Hidden menu to complete a level, down like 100 layers
