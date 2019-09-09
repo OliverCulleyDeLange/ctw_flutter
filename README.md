@@ -24,9 +24,6 @@ A Flutter game app.
 - Totally random score for completing a level.?
 - Hide a clue / code whatever in the description of the app in the app store
 
-More draggable stuff: https://medium.com/flutter-community/a-deep-dive-into-draggable-and-dragtarget-in-flutter-487919f6f1e4
-
-
 Monetisation / Propagation:
 - Watch ad for hints / clues
 - Pay to win - buy me a beer level. (If you enjoyed the app)

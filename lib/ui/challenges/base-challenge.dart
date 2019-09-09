@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:ctw_flutter/domain/challenge.dart';
 import 'package:ctw_flutter/domain/scoring.dart';
 import 'package:ctw_flutter/theme.dart';
 import 'package:ctw_flutter/ui/widgets/success-popup.dart';
+import 'package:firebase_admob/firebase_admob.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../state-container.dart';
@@ -11,8 +15,7 @@ class BaseChallenge extends StatefulWidget {
   final Challenge challenge;
   final Scorer scorer;
 
-  BaseChallenge(
-      {this.child, this.scorer = TimeScorer.fastThreeStar, this.challenge});
+  BaseChallenge({this.child, this.scorer = TimeScorer.fastThreeStar, this.challenge});
 
   static _BaseChallengeState of(BuildContext context) {
     return (context.inheritFromWidgetOfExactType(_ChallengeState)
@@ -28,19 +31,46 @@ class _BaseChallengeState extends State<BaseChallenge> {
   bool _completed = false;
   StarScore _starScore;
   Stopwatch _stopwatch = Stopwatch();
+  InterstitialAd interstitialAd;
 
   @override
   void initState() {
     super.initState();
     debugPrint("Challenge started: ${widget.challenge.name}");
     _stopwatch.start();
+    interstitialAd = getHintAd()
+      ..load();
   }
+
+  InterstitialAd getHintAd() =>
+      InterstitialAd(
+        // Replace the testAdUnitId with an ad unit id from the AdMob dash.
+        // https://developers.google.com/admob/android/test-ads
+        // https://developers.google.com/admob/ios/test-ads
+        adUnitId: InterstitialAd.testAdUnitId,
+        listener: (MobileAdEvent event) {
+          debugPrint("InterstitialAd event is $event");
+          if (event == MobileAdEvent.failedToLoad) {
+            interstitialAd..load();
+          } else if (event == MobileAdEvent.closed) {
+            interstitialAd = getHintAd()
+              ..load();
+          }
+        },
+        targetingInfo: MobileAdTargetingInfo(
+          keywords: <String>['game', 'puzzle'],
+          contentUrl: 'https://flutter.io',
+          childDirected: false,
+          testDevices: <String>[
+          ], // Android emulators are considered test devices
+        ),
+      );
+
 
   attempt(int scoreToAdd) async {
     debugPrint(
         "Challenge attempted: ${widget.challenge
-            .name}. Current time: ${_stopwatch.elapsed
-            .inSeconds} seconds");
+            .name}. Current time: ${_stopwatch.elapsed.inSeconds} seconds");
     StateContainer.of(context).updateChallengeProgress(widget.challenge,
         score: widget.challenge.score + scoreToAdd);
   }
@@ -89,10 +119,24 @@ class _BaseChallengeState extends State<BaseChallenge> {
                   alignment: Alignment.center,
                   children: <Widget>[
                     _completed ? SuccessPopup(_starScore) : widget.child,
+                    Container(
+                        alignment: Alignment.bottomRight,
+                        child: IconButton(
+                            onPressed: () {
+                              debugPrint("Hint requested");
+                              interstitialAd.show();
+                            },
+                            icon: Icon(Icons.help_outline)))
                   ],
                 ),
               ))),
     );
+  }
+
+  @override
+  void dispose() {
+    interstitialAd?.dispose();
+    super.dispose();
   }
 }
 
@@ -107,4 +151,10 @@ class _ChallengeState extends InheritedWidget {
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
+}
+
+getHintAdId() {
+  if (Platform.isAndroid)
+    return "hintca-app-pub-9025204136165737/8229558246";
+  else if (Platform.isIOS) return "";
 }
