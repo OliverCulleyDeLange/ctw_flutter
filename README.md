@@ -10,10 +10,6 @@ A Flutter game app.
 - No words, all emoji / icons / images (no i18n or string management)
 
 ### Challenges (and how you cheat)
-- Click X times
-- Left hand or right hand dialog box - only one shot (watch ad to try again)
-- Battery level
--
 - Rhyming words
 - Kids block toy - drag and drop
 - Make a shape / image out of a tool box of lines / shapes

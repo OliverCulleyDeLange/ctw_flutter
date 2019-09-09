@@ -2,6 +2,7 @@ import 'package:ctw_flutter/domain/challenge.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'base-challenge.dart';
+import 'device/charge-battery.dart';
 import 'device/rotate.dart';
 import 'device/shake.dart';
 import 'gesture/double-tap.dart';
@@ -32,4 +33,5 @@ final Map<String, GetChallengeScreen> challengeScreens = {
   "passcode": wrapChallenge(Passcode()),
   "hidden-word": wrapChallenge(HiddenWord()),
   "sort": wrapChallenge(Sort()),
+  "battery": wrapChallenge(ChargeBattery()),
 };
