@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ctw_flutter/data/db.dart';
 import 'package:ctw_flutter/domain/app-state.dart';
 import 'package:ctw_flutter/domain/challenge.dart';
@@ -25,7 +27,7 @@ class _HomeState extends State<Home> {
 
   getBannerAd() =>
       BannerAd(
-        adUnitId: BannerAd.testAdUnitId,
+        adUnitId: getBannerAdId(),
         size: AdSize.banner,
         listener: (MobileAdEvent event) {
           print("BannerAd event is $event");
@@ -164,4 +166,10 @@ class _HomeState extends State<Home> {
                       .display2,
                 )));
   }
+}
+
+getBannerAdId() {
+  if (Platform.isAndroid)
+    return "ca-app-pub-9025204136165737/2605147732";
+  else if (Platform.isIOS) return "";
 }
