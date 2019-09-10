@@ -33,6 +33,7 @@ class _BaseChallengeState extends State<BaseChallenge> {
   StarScore _starScore;
   Stopwatch _stopwatch = Stopwatch();
   InterstitialAd interstitialAd;
+  bool shouldShowHint = false;
 
   @override
   void initState() {
@@ -119,12 +120,22 @@ class _BaseChallengeState extends State<BaseChallenge> {
             SafeArea(
               child: Container(
                   alignment: Alignment.topRight,
-                  child: IconButton(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      //TODO Hints should be icon / image based?
+                      Text(shouldShowHint ? "Hint " : ""),
+                      IconButton(
                       onPressed: () {
                         debugPrint("Hint requested");
                         interstitialAd.show();
+                        setState(() {
+                          shouldShowHint = true;
+                        });
                       },
-                      icon: Icon(Icons.help_outline))),
+                          icon: Icon(Icons.help_outline)),
+                    ],
+                  )),
             ),
           ])),
     );
