@@ -5,6 +5,7 @@ import 'package:ctw_flutter/domain/scoring.dart';
 import 'package:ctw_flutter/ui/widgets/restart.dart';
 import 'package:ctw_flutter/ui/widgets/success-popup.dart';
 import 'package:ctw_flutter/ui/widgets/tile.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 
 import '../state-container.dart';
@@ -19,15 +20,51 @@ class _HomeState extends State<Home> {
   int _gridRowSize = 4;
   bool showSuccessPopup = false;
   StarScore _starScore = StarScore(2, 3);
+  BannerAd bannerAd;
+  bool adShown = false;
+
+  getBannerAd() =>
+      BannerAd(
+        adUnitId: BannerAd.testAdUnitId,
+        size: AdSize.banner,
+        listener: (MobileAdEvent event) {
+          print("BannerAd event is $event");
+          if (event == MobileAdEvent.loaded) {
+            setState(() {
+              adShown = true;
+            });
+          }
+        },
+        targetingInfo: MobileAdTargetingInfo(
+          testDevices: <String>[
+            "CFC6796C5F6C8026B3C8AE612F629556"
+          ], // Android emulators are considered test devices
+        ),
+      );
+
+  @override
+  void initState() {
+    bannerAd = getBannerAd();
+    bannerAd
+      ..load()
+      ..show();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    bannerAd.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final container = StateContainer.of(context);
     final state = container.state;
-    debugPrint(
-        "Building Home screen: ${state.challenges?.entries?.map((e) => "${e
-            .value.name}:${e.value.completed}")?.reduce((val, elem) =>
-        val + ", $elem")}");
+//    debugPrint(
+//        "Building Home screen: ${state.challenges?.entries?.map((e) => "${e
+//            .value.name}:${e.value.completed}")?.reduce((val, elem) =>
+//        val + ", $elem")}");
 
     return Stack(alignment: Alignment.center, children: <Widget>[
       getHomeScreen(state, context),
@@ -52,6 +89,9 @@ class _HomeState extends State<Home> {
             },
             max: 5,
             min: 3,
+          ),
+          Container(
+            padding: adShown ? EdgeInsets.only(bottom: 50) : EdgeInsets.all(0),
           )
         ],
       ),
@@ -59,7 +99,6 @@ class _HomeState extends State<Home> {
   }
 
   Widget getChallengeTiles(AppState state, BuildContext context) {
-
     List<Widget> _challengeTiles = (state.challenges ?? {})
         .values
         .toList()
@@ -85,7 +124,11 @@ class _HomeState extends State<Home> {
             RestartWidget.restartApp(context);
           },
           child: Icon(Icons.refresh)),
-      Center(child: Text(state.score.toString(), textScaleFactor: 2,))
+      Center(
+          child: Text(
+            state.score.toString(),
+            textScaleFactor: 2,
+          ))
     ];
 
     List<Widget> _allTiles = _challengeTiles;
@@ -109,9 +152,7 @@ class _HomeState extends State<Home> {
                 onTap: () async {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (c) =>
-                          challengeScreen));
+                      MaterialPageRoute(builder: (c) => challengeScreen));
                 },
                 child: Text(
                   state.showCode && index < 4

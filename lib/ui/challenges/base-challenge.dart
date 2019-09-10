@@ -15,7 +15,8 @@ class BaseChallenge extends StatefulWidget {
   final Challenge challenge;
   final Scorer scorer;
 
-  BaseChallenge({this.child, this.scorer = TimeScorer.fastThreeStar, this.challenge});
+  BaseChallenge(
+      {this.child, this.scorer = TimeScorer.fastThreeStar, this.challenge});
 
   static _BaseChallengeState of(BuildContext context) {
     return (context.inheritFromWidgetOfExactType(_ChallengeState)
@@ -44,10 +45,7 @@ class _BaseChallengeState extends State<BaseChallenge> {
 
   InterstitialAd getHintAd() =>
       InterstitialAd(
-        // Replace the testAdUnitId with an ad unit id from the AdMob dash.
-        // https://developers.google.com/admob/android/test-ads
-        // https://developers.google.com/admob/ios/test-ads
-        adUnitId: InterstitialAd.testAdUnitId,
+        adUnitId: getHintAdId(),
         listener: (MobileAdEvent event) {
           debugPrint("InterstitialAd event is $event");
           if (event == MobileAdEvent.failedToLoad) {
@@ -58,14 +56,9 @@ class _BaseChallengeState extends State<BaseChallenge> {
           }
         },
         targetingInfo: MobileAdTargetingInfo(
-          keywords: <String>['game', 'puzzle'],
-          contentUrl: 'https://flutter.io',
-          childDirected: false,
-          testDevices: <String>[
-          ], // Android emulators are considered test devices
+          testDevices: <String>["CFC6796C5F6C8026B3C8AE612F629556"],
         ),
       );
-
 
   attempt(int scoreToAdd) async {
     debugPrint(
@@ -98,38 +91,42 @@ class _BaseChallengeState extends State<BaseChallenge> {
     return _ChallengeState(
       data: this,
       child: Scaffold(
-          body: Container(
-              padding: EdgeInsets.all(20),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
+          body: Stack(children: [
+            Container(
+                padding: EdgeInsets.symmetric(vertical: 70, horizontal: 20),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
                 // Box decoration takes a gradient
-                  gradient: LinearGradient(
-                    // Where the linear gradient begins and ends
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    // Add one stop for each color. Stops should increase from 0 to 1
-                    stops: [0, 1],
-                    colors: [
-                      backgroundGradient_1,
-                      backgroundGradient_2,
+                    gradient: LinearGradient(
+                      // Where the linear gradient begins and ends
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      // Add one stop for each color. Stops should increase from 0 to 1
+                      stops: [0, 1],
+                      colors: [
+                        backgroundGradient_1,
+                        backgroundGradient_2,
+                      ],
+                    )),
+                child: SafeArea(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      _completed ? SuccessPopup(_starScore) : widget.child,
                     ],
-                  )),
-              child: SafeArea(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    _completed ? SuccessPopup(_starScore) : widget.child,
-                    Container(
-                        alignment: Alignment.bottomRight,
-                        child: IconButton(
-                            onPressed: () {
-                              debugPrint("Hint requested");
-                              interstitialAd.show();
-                            },
-                            icon: Icon(Icons.help_outline)))
-                  ],
-                ),
-              ))),
+                  ),
+                )),
+            SafeArea(
+              child: Container(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                      onPressed: () {
+                        debugPrint("Hint requested");
+                        interstitialAd.show();
+                      },
+                      icon: Icon(Icons.help_outline))),
+            ),
+          ])),
     );
   }
 
@@ -155,6 +152,6 @@ class _ChallengeState extends InheritedWidget {
 
 getHintAdId() {
   if (Platform.isAndroid)
-    return "hintca-app-pub-9025204136165737/8229558246";
+    return "ca-app-pub-9025204136165737/8229558246";
   else if (Platform.isIOS) return "";
 }
