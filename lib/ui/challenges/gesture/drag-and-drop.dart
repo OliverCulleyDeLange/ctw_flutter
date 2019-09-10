@@ -8,7 +8,7 @@ class DragAndDrop extends StatelessWidget {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Icon(Icons.touch_app),
+//          Icon(Icons.touch_app),
           Draggable(
             onDragEnd: (details) {
               if (details.wasAccepted) {
