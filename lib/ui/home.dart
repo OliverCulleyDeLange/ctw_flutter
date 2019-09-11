@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:ctw_flutter/data/db.dart';
 import 'package:ctw_flutter/domain/app-state.dart';
-import 'package:ctw_flutter/domain/challenge.dart';
 import 'package:ctw_flutter/domain/scoring.dart';
+import 'package:ctw_flutter/ui/widgets/challenge-tile.dart';
 import 'package:ctw_flutter/ui/widgets/restart.dart';
 import 'package:ctw_flutter/ui/widgets/success-popup.dart';
-import 'package:ctw_flutter/ui/widgets/tile.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 
@@ -101,23 +100,23 @@ class _HomeState extends State<Home> {
   }
 
   Widget getChallengeTiles(AppState state, BuildContext context) {
-    List<Widget> _challengeTiles = (state.challenges ?? {})
+    var _tiles = (state.challenges ?? {})
         .values
         .toList()
-        .asMap()
-        .map((index, challenge) =>
-        MapEntry(
+        .asMap() // Stupid way of doing map with index :/
+        .map((index, challenge) {
+      var tileLabel = state.showCode && index < 4
+          ? state.passcode.substring(index, index + 1)
+          : challenge.id.toString();
+      return MapEntry(
             index,
-            getTile(
-              context,
-              state,
-              index,
-              challenge.id.toString(),
-              challenge,
-              challengeScreens[challenge.name](challenge),
-            )))
-        .values
-        .toList();
+          ChallengeTile(
+              completed: challenge.completed,
+              challengeScreen: challengeScreens[challenge.name](challenge),
+              text: tileLabel));
+    })
+        .values;
+    List<Widget> _challengeTiles = List<Widget>.from(_tiles);
 
     List<Widget> _menuTiles = [
       InkWell(
@@ -139,32 +138,6 @@ class _HomeState extends State<Home> {
     return _allTiles != null
         ? GridView.count(crossAxisCount: _gridRowSize, children: _allTiles)
         : Container();
-  }
-
-  Widget getTile(BuildContext context,
-      AppState state,
-      int index,
-      String tileTitle,
-      Challenge challenge,
-      Widget challengeScreen,) {
-    return ColourAnimatedTile(
-        animate: challenge.completed,
-        buildChild: (animate) =>
-            InkWell(
-                onTap: () async {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (c) => challengeScreen));
-                },
-                child: Text(
-                  state.showCode && index < 4
-                      ? state.passcode.substring(index, index + 1)
-                      : tileTitle,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .display2,
-                )));
   }
 }
 
