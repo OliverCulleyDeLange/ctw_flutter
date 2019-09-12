@@ -8,13 +8,15 @@ import 'package:flutter/material.dart';
 import 'app.dart';
 import 'data/challenge-progress-repository.dart';
 
+bool enableAds = false;
+
 void main() => run();
 
 void run() {
-  if (Platform.isAndroid) {
+  if (enableAds && Platform.isAndroid) {
     FirebaseAdMob.instance.initialize(
         appId: "ca-app-pub-9025204136165737~5839198623");
-  } else if (Platform.isIOS) {
+  } else if (enableAds && Platform.isIOS) {
     FirebaseAdMob.instance.initialize(
         appId: "ca-app-pub-9025204136165737~6974803433");
   }

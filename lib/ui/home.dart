@@ -9,6 +9,7 @@ import 'package:ctw_flutter/ui/widgets/success-popup.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 
+import '../main.dart';
 import '../state-container.dart';
 import 'challenges/challenge-screens.dart';
 
@@ -45,16 +46,20 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    bannerAd = getBannerAd();
-    bannerAd
-      ..load()
-      ..show();
+    if (enableAds) {
+      bannerAd = getBannerAd();
+      bannerAd
+        ..load()
+        ..show();
+    }
     super.initState();
   }
 
   @override
   void dispose() {
-    bannerAd.dispose();
+    if (enableAds) {
+      bannerAd.dispose();
+    }
     super.dispose();
   }
 
@@ -109,13 +114,12 @@ class _HomeState extends State<Home> {
           ? state.passcode.substring(index, index + 1)
           : challenge.id.toString();
       return MapEntry(
-            index,
+          index,
           ChallengeTile(
               completed: challenge.completed,
               challengeScreen: challengeScreens[challenge.name](challenge),
               text: tileLabel));
-    })
-        .values;
+    }).values;
     List<Widget> _challengeTiles = List<Widget>.from(_tiles);
 
     List<Widget> _menuTiles = [

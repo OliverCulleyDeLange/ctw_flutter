@@ -8,6 +8,7 @@ import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../../main.dart';
 import '../../state-container.dart';
 
 class BaseChallenge extends StatefulWidget {
@@ -40,8 +41,10 @@ class _BaseChallengeState extends State<BaseChallenge> {
     super.initState();
     debugPrint("Challenge started: ${widget.challenge.name}");
     _stopwatch.start();
-    interstitialAd = getHintAd()
-      ..load();
+    if (enableAds) {
+      interstitialAd = getHintAd()
+        ..load();
+    }
   }
 
   InterstitialAd getHintAd() =>
@@ -128,7 +131,9 @@ class _BaseChallengeState extends State<BaseChallenge> {
                       IconButton(
                       onPressed: () {
                         debugPrint("Hint requested");
-                        interstitialAd.show();
+                        if (enableAds) {
+                          interstitialAd.show();
+                        }
                         setState(() {
                           shouldShowHint = true;
                         });
@@ -143,7 +148,9 @@ class _BaseChallengeState extends State<BaseChallenge> {
 
   @override
   void dispose() {
-    interstitialAd?.dispose();
+    if (enableAds) {
+      interstitialAd?.dispose();
+    }
     super.dispose();
   }
 }
