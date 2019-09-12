@@ -5,6 +5,7 @@ import 'base-challenge.dart';
 import 'device/charge-battery.dart';
 import 'device/rotate.dart';
 import 'device/shake.dart';
+import 'game/maze.dart';
 import 'gesture/double-tap.dart';
 import 'gesture/drag-and-drop.dart';
 import 'gesture/long-press.dart';
@@ -34,4 +35,5 @@ final Map<String, GetChallengeScreen> challengeScreens = {
   "hidden-word": wrapChallenge(HiddenWord()),
   "sort": wrapChallenge(Sort()),
   "battery": wrapChallenge(ChargeBattery()),
+  "maze": wrapChallenge(Maze()),
 };
