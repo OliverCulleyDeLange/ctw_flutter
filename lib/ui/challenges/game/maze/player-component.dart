@@ -54,7 +54,7 @@ class PlayerComponent extends BodyComponent {
     final activeBodyDef = new BodyDef();
     activeBodyDef.linearVelocity = new Vector2(0.0, 0.0);
     activeBodyDef.position = new Vector2(0.0, 50.0);
-    activeBodyDef.type = BodyType.KINEMATIC;
+    activeBodyDef.type = BodyType.DYNAMIC;
 //    activeBodyDef.bullet = true;
     BodyDef bodyDef = activeBodyDef;
 
