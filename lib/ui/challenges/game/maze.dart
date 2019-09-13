@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:box2d_flame/box2d.dart';
+import 'package:flame/box2d/box2d_component.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:sensors/sensors.dart';
 
-class Maze extends StatelessWidget {
+class MazeChallenge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MazeGame().widget;
@@ -17,11 +19,15 @@ class MazeGame extends BaseGame {
   StreamSubscription<AccelerometerEvent> accelerometer;
 
   Player player;
+  MazeWorld mazeWorld = MazeWorld();
 
   MazeGame() {
+    mazeWorld.initializeWorld();
     player = Player(accelerometer);
-    add(player); // this will call resize the first time as well
+    add(player);
+    add(mazeWorld);
   }
+
 
   @override
   void onAttach() {
@@ -38,6 +44,56 @@ class MazeGame extends BaseGame {
   @override
   void lifecycleStateChange(AppLifecycleState state) {
     debugPrint("Game state now: $state");
+  }
+}
+
+class TargetComponent extends BodyComponent {
+  TargetComponent(MazeWorld mazeWorld) : super(mazeWorld) {
+    _createBody();
+  }
+
+  @override
+  void update(double t) {
+//    this.idle = body.linearVelocity.x.abs() < 0.1 && body.linearVelocity.y.abs() < 0.1;
+//    this.forward = body.linearVelocity.x >= 0.0;
+//    this.jumping = body.getContactList() == null;
+  }
+
+  void _createBody() {
+    final shape = new CircleShape();
+    shape.radius = 20;
+    shape.p.x = 0.0;
+
+    final activeFixtureDef = new FixtureDef();
+    activeFixtureDef.shape = shape;
+    activeFixtureDef.restitution = 0.0;
+    activeFixtureDef.density = 0.05;
+    activeFixtureDef.friction = 0.2;
+    FixtureDef fixtureDef = activeFixtureDef;
+    final activeBodyDef = new BodyDef();
+    activeBodyDef.linearVelocity = new Vector2(0.0, 0.0);
+    activeBodyDef.position = new Vector2(0.0, 15.0);
+    activeBodyDef.type = BodyType.DYNAMIC;
+    activeBodyDef.bullet = true;
+    BodyDef bodyDef = activeBodyDef;
+
+    this.body = world.createBody(bodyDef)
+      ..createFixtureFromFixtureDef(fixtureDef);
+  }
+
+  void input(Offset position) {
+    Vector2 force =
+    position.dx < 250 ? new Vector2(-1.0, 0.0) : new Vector2(1.0, 0.0);
+    body.applyForce(force..scale(10000.0), center);
+  }
+
+//  Drag handleDrag(Offset position) {
+//    return new HandleNinjaDrag(this);
+//  }
+
+  void stop() {
+    body.linearVelocity = new Vector2(0.0, 0.0);
+    body.angularVelocity = 0.0;
   }
 }
 
@@ -93,23 +149,80 @@ class Player extends PositionComponent {
   }
 }
 
-//class MazePainter extends CustomPainter {
-//  double circleRadius = 50;
-//  Offset pos;
-//
-//  MazePainter(this.pos);
-//
+class MazeWorld extends Box2DComponent {
+  TargetComponent target;
+
+  MazeWorld() : super(scale: 4.0);
+
+  void initializeWorld() {
+    addAll(new DemoLevel(this).bodies);
+    add(target = TargetComponent(this));
+  }
+
 //  @override
-//  void paint(Canvas canvas, Size size) {
-//
-//    var midX = size.width / 2;
-//    var midY = size.height / 2;
-//    canvas.drawCircle(
-//        Offset((pos.dx * size.width) + midX, (pos.dy * size.height) + midY),
-//        circleRadius,
-//        paint);
+//  void update(t) {
+//    super.update(t);
+//    cameraFollow(target, horizontal: 0.4, vertical: 0.4);
 //  }
-//
-//  @override
-//  bool shouldRepaint(MazePainter old) => false;
-//}
+
+//  void handleTap(Offset position) {
+//    target.stop();
+//  }
+
+//  Drag handleDrag(Offset position) {
+//    return target.handleDrag(position);
+//  }
+}
+
+class DemoLevel {
+  List<BodyComponent> _bodies = new List();
+
+  DemoLevel(Box2DComponent box) {
+    _bodies.add(new WallBody(
+        box, Orientation.portrait, 1.0, 0.05, Alignment.topCenter));
+    _bodies.add(new WallBody(
+        box, Orientation.portrait, 1.0, 0.05, Alignment.bottomCenter));
+    _bodies.add(new WallBody(
+        box, Orientation.portrait, 0.05, 1.0, Alignment.centerRight));
+    _bodies.add(new WallBody(
+        box, Orientation.portrait, 0.05, 1.0, Alignment.centerLeft));
+  }
+
+  List<BodyComponent> get bodies => _bodies;
+}
+
+class WallBody extends BodyComponent {
+  Orientation orientation;
+  double widthPercent;
+  double heightPercent;
+  Alignment alignment;
+
+  bool first = true;
+
+  WallBody(Box2DComponent box, this.orientation, this.widthPercent,
+      this.heightPercent, this.alignment)
+      : super(box) {
+    _createBody();
+  }
+
+  void _createBody() {
+    double width = box.viewport.width * widthPercent;
+    double height = box.viewport.height * heightPercent;
+
+    double x = alignment.x * (box.viewport.width - width);
+    double y = (-alignment.y) * (box.viewport.height - height);
+
+    final shape = new PolygonShape();
+    shape.setAsBoxXY(width / 2, height / 2);
+    final fixtureDef = new FixtureDef();
+    fixtureDef.shape = shape;
+
+    fixtureDef.restitution = 0.0;
+    fixtureDef.friction = 0.2;
+    final bodyDef = new BodyDef();
+    bodyDef.position = new Vector2(x / 2, y / 2);
+    Body groundBody = world.createBody(bodyDef);
+    groundBody.createFixtureFromFixtureDef(fixtureDef);
+    this.body = groundBody;
+  }
+}

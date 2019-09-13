@@ -35,5 +35,5 @@ final Map<String, GetChallengeScreen> challengeScreens = {
   "hidden-word": wrapChallenge(HiddenWord()),
   "sort": wrapChallenge(Sort()),
   "battery": wrapChallenge(ChargeBattery()),
-  "maze": wrapChallenge(Maze()),
+  "maze": wrapChallenge(MazeChallenge()),
 };
