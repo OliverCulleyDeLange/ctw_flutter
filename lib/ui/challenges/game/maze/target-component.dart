@@ -28,10 +28,10 @@ class TargetComponent extends BodyComponent {
     activeFixtureDef.friction = 0.2;
     FixtureDef fixtureDef = activeFixtureDef;
     final activeBodyDef = new BodyDef();
-    activeBodyDef.linearVelocity = new Vector2(0.0, 0.0);
-    activeBodyDef.position = new Vector2(0.0, 15.0);
+    activeBodyDef.linearVelocity = new Vector2(0, 0.0);
+    activeBodyDef.position = new Vector2(0.0, 0.0);
     activeBodyDef.type = BodyType.DYNAMIC;
-    activeBodyDef.bullet = true;
+//    activeBodyDef.bullet = true;
     BodyDef bodyDef = activeBodyDef;
 
     this.body = world.createBody(bodyDef)

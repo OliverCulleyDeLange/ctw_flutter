@@ -1,12 +1,9 @@
-import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:sensors/sensors.dart';
 
 import 'maze/maze-world.dart';
-import 'maze/player-positioned.dart';
 
 class MazeChallenge extends StatelessWidget {
   @override
@@ -16,15 +13,15 @@ class MazeChallenge extends StatelessWidget {
 }
 
 class MazeGame extends BaseGame {
-  StreamSubscription<AccelerometerEvent> accelerometer;
+//  StreamSubscription<AccelerometerEvent> accelerometer;
 
-  Player player;
+//  Player player;
   MazeWorld mazeWorld = MazeWorld();
 
   MazeGame() {
     mazeWorld.initializeWorld();
-    player = Player(accelerometer);
-    add(player);
+//    player = Player(accelerometer);
+//    add(player);
     add(mazeWorld);
   }
 
@@ -32,13 +29,14 @@ class MazeGame extends BaseGame {
   @override
   void onAttach() {
     debugPrint("Game attach");
-    accelerometer = accelerometerEvents.listen(player.accelerometerListener);
+//    accelerometer = accelerometerEvents.listen(mazeWorld.accelerometerListener);
   }
 
   @override
   void onDetach() {
     debugPrint("Game detatch");
-    accelerometer.cancel();
+    mazeWorld.destroyWorld(); //cleanup
+//    accelerometer.cancel();
   }
 
   @override
