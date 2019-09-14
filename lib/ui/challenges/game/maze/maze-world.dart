@@ -7,9 +7,11 @@ import 'package:flame/box2d/box2d_component.dart';
 import 'package:flutter/material.dart';
 import 'package:sensors/sensors.dart';
 
+import '../../base-challenge.dart';
 import 'demo-level.dart';
 
 class MazeWorld extends Box2DComponent {
+  var targetCount = 0;
   List<TargetComponent> targets = [];
   PlayerComponent player;
 
@@ -17,10 +19,13 @@ class MazeWorld extends Box2DComponent {
 
   MyContactListener myContactListener;
 
-  MazeWorld() : super(scale: 10) {
+  BuildContext context;
+
+  MazeWorld(this.context) : super(scale: 10) {
     accelerometerSubscription =
         accelerometerEvents.listen((AccelerometerEvent event) {
-//        debugPrint("Acceleromter: ${event.x.toStringAsPrecision(2)},${event.y.toStringAsPrecision(2)}");
+//          debugPrint("Acceleromter: ${event.x.toStringAsPrecision(2)},${event.y
+//              .toStringAsPrecision(2)}");
           var m = 20.0;
           world.setGravity(Vector2(-event.x * m, (event.z - 6) * m));
         });
@@ -34,7 +39,10 @@ class MazeWorld extends Box2DComponent {
     targets.add(TargetComponent(this));
     targets.add(TargetComponent(this));
     targets.add(TargetComponent(this));
-    targets.forEach((t) => add(t));
+    targets.forEach((t) {
+      add(t);
+      targetCount++;
+    });
     add(player = PlayerComponent(this));
     world.setContactListener(myContactListener = MyContactListener());
   }
@@ -43,6 +51,9 @@ class MazeWorld extends Box2DComponent {
   void update(t) {
     super.update(t);
     myContactListener.toDestroy?.forEach((body) {
+      if (--targetCount == 0) {
+        BaseChallenge.of(context).complete();
+      }
       myContactListener.toDestroy.remove(body);
       world.destroyBody(body);
     });

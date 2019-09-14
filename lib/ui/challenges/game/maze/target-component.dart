@@ -20,7 +20,7 @@ class TargetComponent extends BodyComponent {
         ..userData = "target"
         ..shape = (new CircleShape()
           ..radius = 0.5)
-        ..restitution = 2.0
+        ..restitution = 1.0
         ..density = 0.05
         ..friction = 0.0);
   }

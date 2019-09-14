@@ -9,14 +9,15 @@ import 'maze/maze-world.dart';
 class MazeChallenge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MazeGame().widget;
+    return MazeGame(context).widget;
   }
 }
 
 class MazeGame extends BaseGame {
-  MazeWorld mazeWorld = MazeWorld();
+  MazeWorld mazeWorld;
 
-  MazeGame() {
+  MazeGame(BuildContext context) {
+    mazeWorld = MazeWorld(context);
     mazeWorld.initializeWorld();
     add(Bg());
     add(mazeWorld);
