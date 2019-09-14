@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/components/component.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +18,7 @@ class MazeGame extends BaseGame {
 
   MazeGame() {
     mazeWorld.initializeWorld();
+    add(Bg());
     add(mazeWorld);
   }
 
@@ -37,4 +39,28 @@ class MazeGame extends BaseGame {
   }
 }
 
+class Bg extends PositionComponent {
+  final paint = Paint()
+    ..color = Colors.red[400]
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 10;
 
+  @override
+  void render(Canvas canvas) {
+    prepareCanvas(canvas);
+    canvas.drawPath(
+        Path()
+          ..lineTo(width, 0)..lineTo(width, height)..lineTo(0, height)..lineTo(
+            0, 0),
+        paint);
+  }
+
+  @override
+  void resize(Size size) {
+    width = size.width;
+    height = size.height;
+  }
+
+  @override
+  void update(double t) {}
+}

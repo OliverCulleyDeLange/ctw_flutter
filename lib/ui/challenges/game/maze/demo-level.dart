@@ -7,13 +7,13 @@ class DemoLevel {
 
   DemoLevel(Box2DComponent box) {
     _bodies.add(WallBody(
-        box, 1.0, 0.05, Alignment.topCenter));
+        box, 1.0, 0.01, Alignment.topCenter));
     _bodies.add(WallBody(
-        box, 1.0, 0.05, Alignment.bottomCenter));
+        box, 1.0, 0.01, Alignment.bottomCenter));
     _bodies.add(WallBody(
-        box, 0.05, 1.0, Alignment.centerRight));
+        box, 0.01, 1.0, Alignment.centerRight));
     _bodies.add(WallBody(
-        box, 0.05, 1.0, Alignment.centerLeft));
+        box, 0.01, 1.0, Alignment.centerLeft));
   }
 
   List<BodyComponent> get bodies => _bodies;
@@ -32,16 +32,18 @@ class WallBody extends BodyComponent {
 
   @override
   void resize(Size size) {
+    super.resize(size);
     _createBody();
   }
 
   void _createBody() {
+//    debugPrint("vw: ${box.viewport.width}, vh: ${box.viewport.height}");
+//    debugPrint("vsw: ${box.viewport.size.width}, vsh: ${box.viewport.size.height}");
     double width = box.viewport.width * widthPercent;
     double height = box.viewport.height * heightPercent;
 
     double x = alignment.x * (box.viewport.width - width);
     double y = (-alignment.y) * (box.viewport.height - height);
-//    debugPrint("w: ${box.viewport.width}, h: ${box.viewport.height}");
     this.body = world.createBody(BodyDef()
       ..position = new Vector2(x, y))
       ..createFixtureFromFixtureDef(FixtureDef()
