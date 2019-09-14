@@ -13,30 +13,22 @@ class MazeChallenge extends StatelessWidget {
 }
 
 class MazeGame extends BaseGame {
-//  StreamSubscription<AccelerometerEvent> accelerometer;
-
-//  Player player;
   MazeWorld mazeWorld = MazeWorld();
 
   MazeGame() {
     mazeWorld.initializeWorld();
-//    player = Player(accelerometer);
-//    add(player);
     add(mazeWorld);
   }
-
 
   @override
   void onAttach() {
     debugPrint("Game attach");
-//    accelerometer = accelerometerEvents.listen(mazeWorld.accelerometerListener);
   }
 
   @override
   void onDetach() {
     debugPrint("Game detatch");
     mazeWorld.destroyWorld(); //cleanup
-//    accelerometer.cancel();
   }
 
   @override

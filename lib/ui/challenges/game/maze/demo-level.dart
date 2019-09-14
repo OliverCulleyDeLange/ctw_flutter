@@ -39,18 +39,14 @@ class WallBody extends BodyComponent {
 
     double x = alignment.x * (box.viewport.width - width);
     double y = (-alignment.y) * (box.viewport.height - height);
-
-    final shape = new PolygonShape();
-    shape.setAsBoxXY(width / 2, height / 2);
-    final fixtureDef = new FixtureDef();
-    fixtureDef.shape = shape;
-
-    fixtureDef.restitution = 0.0;
-    fixtureDef.friction = 0.2;
-    final bodyDef = new BodyDef();
-    bodyDef.position = new Vector2(x / 2, y / 2);
-    Body groundBody = world.createBody(bodyDef);
-    groundBody.createFixtureFromFixtureDef(fixtureDef);
-    this.body = groundBody;
+    debugPrint("w: ${box.viewport.width}, h: ${box.viewport.height}");
+    this.body =
+    world.createBody(BodyDef()
+      ..position = new Vector2(x / 2, y / 2))
+      ..createFixtureFromFixtureDef(FixtureDef()
+        ..shape = (PolygonShape()
+          ..setAsBoxXY(width / 2, height / 2))
+        ..restitution = 1
+        ..friction = 0.0);
   }
 }

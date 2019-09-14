@@ -9,14 +9,7 @@ import 'package:sensors/sensors.dart';
 class PlayerComponent extends BodyComponent {
   final paint = Paint()
     ..color = Colors.lightBlueAccent[400]
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 20;
-
-  Size canvassSize;
-  double maxXLean = 3.0;
-  double maxYLean = 1.5;
-  double xmod = 0.0;
-  double ymod = 0.0;
+    ..style = PaintingStyle.fill;
 
   StreamSubscription<AccelerometerEvent> accelerometerSubscription;
   AccelerometerEvent latestAccelerometerEvent = AccelerometerEvent(0, 0, 0);
@@ -27,45 +20,37 @@ class PlayerComponent extends BodyComponent {
 //        debugPrint("Acceleromter: ${event.x.toStringAsPrecision(2)},${event.y.toStringAsPrecision(2)}");
           latestAccelerometerEvent = event;
         });
-    _createBody();
+
+    this.body = world.createBody(BodyDef()
+      ..linearDamping = 1
+      ..linearVelocity = new Vector2(0.0, 0.0)
+      ..position = new Vector2(0.0, 10)
+      ..type = BodyType.DYNAMIC)
+      ..createFixtureFromFixtureDef(FixtureDef()
+        ..shape = (new CircleShape()
+          ..radius = 1
+          ..p.x = 0.0)
+        ..restitution = .2
+        ..density = 1.0
+        ..friction = 0.2);
   }
 
   @override
   void update(double t) {
     super.update(t); // needed?
 //    debugPrint("$xmod $ymod ${latestAccelerometerEvent.toString()}");
-    body.linearVelocity = body.linearVelocity
-      ..addScaled(
-          Vector2(-latestAccelerometerEvent.x, -latestAccelerometerEvent.y),
-          0.5);
-  }
-
-  void _createBody() {
-    final shape = new CircleShape();
-    shape.radius = 10;
-    shape.p.x = 0.0;
-
-    final activeFixtureDef = new FixtureDef();
-    activeFixtureDef.shape = shape;
-    activeFixtureDef.restitution = 0.0;
-    activeFixtureDef.density = 0.05;
-    activeFixtureDef.friction = 0.2;
-    FixtureDef fixtureDef = activeFixtureDef;
-    final activeBodyDef = new BodyDef();
-    activeBodyDef.linearVelocity = new Vector2(0.0, 0.0);
-    activeBodyDef.position = new Vector2(0.0, 50.0);
-    activeBodyDef.type = BodyType.DYNAMIC;
-//    activeBodyDef.bullet = true;
-    BodyDef bodyDef = activeBodyDef;
-
-    this.body = world.createBody(bodyDef)
-      ..createFixtureFromFixtureDef(fixtureDef);
+    var m = 30.0;
+    world.setGravity(Vector2(
+        -latestAccelerometerEvent.x * m, -latestAccelerometerEvent.y * m));
+//    body.linearVelocity
+//      ..addScaled(
+//          Vector2(-latestAccelerometerEvent.x, -latestAccelerometerEvent.y),
+//          t * 10);
   }
 
   @override
-  void resize(Size size) {
-    debugPrint("Player resize");
-    canvassSize = size;
+  void renderCircle(Canvas canvas, Offset center, double radius) {
+    canvas.drawCircle(center, radius, paint);
   }
 
   closeAccelerometerSubscription() {
