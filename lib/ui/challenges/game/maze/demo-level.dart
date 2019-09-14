@@ -33,12 +33,13 @@ class WallBody extends BodyComponent {
   @override
   void resize(Size size) {
     super.resize(size);
-    _createBody();
+    _createBody(size: size);
   }
 
-  void _createBody() {
+  void _createBody({Size size}) {
 //    debugPrint("vw: ${box.viewport.width}, vh: ${box.viewport.height}");
 //    debugPrint("vsw: ${box.viewport.size.width}, vsh: ${box.viewport.size.height}");
+
     double width = box.viewport.width * widthPercent;
     double height = box.viewport.height * heightPercent;
 

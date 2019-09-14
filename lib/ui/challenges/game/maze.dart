@@ -59,6 +59,7 @@ class Bg extends PositionComponent {
   void resize(Size size) {
     width = size.width;
     height = size.height;
+//    debugPrint("BG vw: ${width}, vh: ${height}");
   }
 
   @override

@@ -10,26 +10,42 @@ import 'package:sensors/sensors.dart';
 import 'demo-level.dart';
 
 class MazeWorld extends Box2DComponent {
-  TargetComponent target;
+  List<TargetComponent> targets = [];
   PlayerComponent player;
 
   StreamSubscription<AccelerometerEvent> accelerometerSubscription;
+
+  MyContactListener myContactListener;
 
   MazeWorld() : super(scale: 10) {
     accelerometerSubscription =
         accelerometerEvents.listen((AccelerometerEvent event) {
 //        debugPrint("Acceleromter: ${event.x.toStringAsPrecision(2)},${event.y.toStringAsPrecision(2)}");
           var m = 20.0;
-          world.setGravity(Vector2(
-              -event.x * m, -event.y * m));
+          world.setGravity(Vector2(-event.x * m, -event.y * m));
         });
   }
 
   @override
   void initializeWorld() {
     addAll(new DemoLevel(this).bodies); //Maze walls
-    add(target = TargetComponent(this)); //Maze target
+    targets.add(TargetComponent(this));
+    targets.add(TargetComponent(this));
+    targets.add(TargetComponent(this));
+    targets.add(TargetComponent(this));
+    targets.add(TargetComponent(this));
+    targets.forEach((t) => add(t));
     add(player = PlayerComponent(this));
+    world.setContactListener(myContactListener = MyContactListener());
+  }
+
+  @override
+  void update(t) {
+    super.update(t);
+    myContactListener.toDestroy?.forEach((body) {
+      myContactListener.toDestroy.remove(body);
+      world.destroyBody(body);
+    });
   }
 
   @override
@@ -40,5 +56,37 @@ class MazeWorld extends Box2DComponent {
 
   void destroyWorld() {
     accelerometerSubscription.cancel();
+  }
+}
+
+class MyContactListener extends ContactListener {
+  List<Body> toDestroy = [];
+
+  @override
+  void beginContact(Contact contact) {
+    var a = contact.fixtureA.userData;
+    var b = contact.fixtureB.userData;
+    if (a != null && b != null && a != b) {
+      debugPrint("${a}, ${contact.fixtureB.userData}");
+
+      var targetToDestroy = [contact.fixtureB, contact.fixtureA]
+          .firstWhere((f) => f.userData == "target");
+      toDestroy.add(targetToDestroy.getBody());
+    }
+  }
+
+  @override
+  void endContact(Contact contact) {
+    // TODO: implement endContact
+  }
+
+  @override
+  void postSolve(Contact contact, ContactImpulse impulse) {
+    // TODO: implement postSolve
+  }
+
+  @override
+  void preSolve(Contact contact, Manifold oldManifold) {
+    // TODO: implement preSolve
   }
 }
