@@ -22,7 +22,7 @@ class MazeWorld extends Box2DComponent {
         accelerometerEvents.listen((AccelerometerEvent event) {
 //        debugPrint("Acceleromter: ${event.x.toStringAsPrecision(2)},${event.y.toStringAsPrecision(2)}");
           var m = 20.0;
-          world.setGravity(Vector2(-event.x * m, -event.y * m));
+          world.setGravity(Vector2(-event.x * m, (event.z - 6) * m));
         });
   }
 
