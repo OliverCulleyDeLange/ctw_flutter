@@ -1,11 +1,11 @@
 import 'package:ctw_flutter/domain/challenge.dart';
+import 'package:ctw_flutter/ui/challenges/game/maze/maze.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'base-challenge.dart';
 import 'device/charge-battery.dart';
 import 'device/rotate.dart';
 import 'device/shake.dart';
-import 'game/maze.dart';
 import 'gesture/double-tap.dart';
 import 'gesture/drag-and-drop.dart';
 import 'gesture/long-press.dart';

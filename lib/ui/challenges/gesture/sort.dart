@@ -48,14 +48,19 @@ class _SortState extends State<Sort> {
       return data.sortGroup == sortGroup;
     }, builder: (context, candidateData, rejectedData) {
       return Container(
-        height: 200,
         color: color,
-        child: GridView.count(
-            crossAxisCount: 2,
-            children: sortables
-                .where((s) => s.sorted && s.sortGroup == sortGroup)
-                .map((s) => Icon(s.icon))
-                .toList()),
+        child: OrientationBuilder(
+          builder: (context, orientation) =>
+              GridView.count(
+                  crossAxisCount: orientation == Orientation.portrait ? 2 : 4,
+                  children: sortables
+                      .where((s) => s.sorted && s.sortGroup == sortGroup)
+                      .map((s) =>
+                      Icon(
+                        s.icon,
+                      ))
+                      .toList()),
+        ),
       );
     });
   }
@@ -63,16 +68,19 @@ class _SortState extends State<Sort> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            child: getDragTarget("green", Colors.green),
-          ),
-          Expanded(
-            child: getDragTarget("red", Colors.red),
-          )
-        ],
+      Flexible(
+        fit: FlexFit.tight,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              child: getDragTarget("green", Colors.green),
+            ),
+            Expanded(
+              child: getDragTarget("red", Colors.red),
+            )
+          ],
+        ),
       ),
       Flexible(
         fit: FlexFit.tight,

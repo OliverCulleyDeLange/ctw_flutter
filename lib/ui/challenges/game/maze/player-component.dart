@@ -21,7 +21,7 @@ class PlayerComponent extends BodyComponent {
         ..shape = (new CircleShape()
           ..radius = 0.75
           ..p.x = 0.0)
-        ..restitution = 0.0
+        ..restitution = 1.0
         ..density = 1.0
         ..friction = 0.2);
   }

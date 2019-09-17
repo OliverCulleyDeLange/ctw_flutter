@@ -27,7 +27,7 @@ class MazeWorld extends Box2DComponent {
 //          debugPrint("Acceleromter: ${event.x.toStringAsPrecision(2)},${event.y
 //              .toStringAsPrecision(2)}");
           var m = 20.0;
-          world.setGravity(Vector2(-event.x * m, (event.z - 6) * m));
+          world.setGravity(Vector2(-event.x * m, -event.y * m));
         });
   }
 
@@ -50,13 +50,15 @@ class MazeWorld extends Box2DComponent {
   @override
   void update(t) {
     super.update(t);
+    var toRemove = [];
     myContactListener.toDestroy?.forEach((body) {
       if (--targetCount == 0) {
         BaseChallenge.of(context).complete();
       }
-      myContactListener.toDestroy.remove(body);
+      toRemove.add(body);
       world.destroyBody(body);
     });
+    myContactListener.toDestroy.clear();
   }
 
   @override

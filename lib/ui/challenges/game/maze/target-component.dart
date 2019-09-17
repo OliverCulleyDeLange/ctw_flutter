@@ -21,7 +21,7 @@ class TargetComponent extends BodyComponent {
         ..shape = (new CircleShape()
           ..radius = 0.5)
         ..restitution = 1.0
-        ..density = 0.05
+        ..density = 0.01
         ..friction = 0.0);
   }
 }

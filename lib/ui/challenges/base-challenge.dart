@@ -97,7 +97,7 @@ class _BaseChallengeState extends State<BaseChallenge> {
       child: Scaffold(
           body: Stack(children: [
             Container(
-                padding: EdgeInsets.symmetric(vertical: 70, horizontal: 20),
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                 // Box decoration takes a gradient

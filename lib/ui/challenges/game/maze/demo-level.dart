@@ -50,7 +50,7 @@ class WallBody extends BodyComponent {
       ..createFixtureFromFixtureDef(FixtureDef()
         ..shape = (PolygonShape()
           ..setAsBoxXY(width, height))
-        ..restitution = 1
+        ..restitution = 0.5
         ..friction = 0.0);
   }
 }

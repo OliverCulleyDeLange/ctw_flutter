@@ -3,13 +3,33 @@ import 'dart:ui';
 import 'package:flame/components/component.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-import 'maze/maze-world.dart';
+import 'maze-world.dart';
 
-class MazeChallenge extends StatelessWidget {
+class MazeChallenge extends StatefulWidget {
+  @override
+  _MazeChallengeState createState() => _MazeChallengeState();
+}
+
+class _MazeChallengeState extends State<MazeChallenge> {
   @override
   Widget build(BuildContext context) {
     return MazeGame(context).widget;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+  }
+
+  @override
+  dispose() {
+    SystemChrome.setPreferredOrientations([]);
+    super.dispose();
   }
 }
 
