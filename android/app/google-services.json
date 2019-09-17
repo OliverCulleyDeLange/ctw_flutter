@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1071989953123",
+    "firebase_url": "https://ctwflutter.firebaseio.com",
+    "project_id": "ctwflutter",
+    "storage_bucket": "ctwflutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1071989953123:android:cb834b45fbcc91e8e15e56",
+        "android_client_info": {
+          "package_name": "uk.co.oliverdelange.ctw_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1071989953123-6g71kaq1ik3e995bkm36h3i2big9rheu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXfygzjErCoWRsNaYi7CpqifzdpJW-Vc0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1071989953123-6g71kaq1ik3e995bkm36h3i2big9rheu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
