@@ -123,17 +123,17 @@ class _HomeState extends State<Home> {
     List<Widget> _challengeTiles = List<Widget>.from(_tiles);
 
     List<Widget> _menuTiles = [
+      Center(
+          child: Text(
+            state.score != null ? state.score.toString() : "0",
+            textScaleFactor: 2,
+          )),
       InkWell(
           onTap: () async {
             await ChallengeProgressDB.resetDb();
             RestartWidget.restartApp(context);
           },
           child: Icon(Icons.refresh)),
-      Center(
-          child: Text(
-            state.score.toString(),
-            textScaleFactor: 2,
-          ))
     ];
 
     List<Widget> _allTiles = _challengeTiles;
