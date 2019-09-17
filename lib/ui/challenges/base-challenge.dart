@@ -8,6 +8,7 @@ import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../../app.dart';
 import '../../main.dart';
 import '../../state-container.dart';
 
@@ -40,6 +41,11 @@ class _BaseChallengeState extends State<BaseChallenge> {
   void initState() {
     super.initState();
     debugPrint("Challenge started: ${widget.challenge.name}");
+    MyApp.analytics
+        .setCurrentScreen(screenName: widget.challenge.name)
+        .then((_) => debugPrint("Sent current screen to GA"), onError: (e) {
+      debugPrint("Failed to send current screen to GA! $e");
+    });
     _stopwatch.start();
     if (enableAds) {
       interstitialAd = getHintAd()
@@ -78,15 +84,24 @@ class _BaseChallengeState extends State<BaseChallenge> {
         "Challenge completed: ${widget.challenge.name} in ${_stopwatch.elapsed
             .inSeconds} seconds");
     debugPrint("setState in BaseChallengeState");
+
+    var starScore = widget.scorer.getStarScore(_stopwatch.elapsed);
     setState(() {
       _completed = true;
-      _starScore = widget.scorer.getStarScore(_stopwatch.elapsed);
+      _starScore = starScore;
     });
     StateContainer.of(context).updateChallengeProgress(widget.challenge,
         complete: true,
         score: widget.challenge.score + _stopwatch.elapsed.inSeconds);
     Future.delayed(Duration(seconds: 1), () {
       Navigator.pop(context);
+    });
+    MyApp.analytics.logEvent(name: "level_complete", parameters: {
+      "score": _stopwatch.elapsed.inSeconds,
+      "stars": starScore.toString(),
+      "level": widget.challenge.name,
+    }).then((_) => debugPrint("Sent current screen to GA"), onError: (e) {
+      debugPrint("Failed to send current screen to GA!: $e");
     });
   }
 
