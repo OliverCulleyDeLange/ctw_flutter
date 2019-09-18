@@ -4,12 +4,11 @@ A Flutter game app.
 
 ### TODO
 - Clues
-- Watch ad for clue
 
 ### USPs:
 - No words, all emoji / icons / images (no i18n or string management)
 
-### Challenges (and how you cheat)
+### Challenges
 - Rhyming words
 - Kids block toy - drag and drop
 - Make a shape / image out of a tool box of lines / shapes
