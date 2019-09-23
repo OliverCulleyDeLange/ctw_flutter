@@ -1,26 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-// Tutorial on physics animations
-// https://flutter.dev/docs/cookbook/animation/physics-simulation#complete-example
-
-main() {
-  runApp(MaterialApp(home: PhysicsCardDragDemo()));
-}
-
-class PhysicsCardDragDemo extends StatelessWidget {
-  @override
+class Spring extends StatelessWidget {
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: DraggableCard(
-        child: FlutterLogo(
-          size: 128,
-        ),
-      ),
+    return DraggableCard(
+      child: Icon(FontAwesomeIcons.magnet),
     );
   }
 }
+
+// Tutorial on physics animations
+// https://flutter.dev/docs/cookbook/animation/physics-simulation#complete-example
 
 /// A draggable card that moves back to [Alignment.center] when it's
 /// released.
@@ -70,8 +61,6 @@ class _DraggableCardState extends State<DraggableCard>
     final simulation = SpringSimulation(spring, 0, 1, -unitVelocity);
 
     _controller.animateWith(simulation);
-//    _controller.reset();
-//    _controller.forward();
   }
 
   @override
@@ -112,9 +101,7 @@ class _DraggableCardState extends State<DraggableCard>
       },
       child: Align(
         alignment: _dragAlignment,
-        child: Card(
-          child: widget.child,
-        ),
+        child: widget.child,
       ),
     );
   }
