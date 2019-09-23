@@ -7,6 +7,7 @@ import 'package:ctw_flutter/ui/widgets/success-popup.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../app.dart';
 import '../../main.dart';
@@ -143,7 +144,7 @@ class _BaseChallengeState extends State<BaseChallenge> {
                     children: <Widget>[
                       //TODO Hints should be icon / image based?
                       Text(shouldShowHint ? "Hint " : ""),
-                      IconButton(
+                      FlatButton(
                       onPressed: () {
                         debugPrint("Hint requested");
                         if (enableAds) {
@@ -153,7 +154,12 @@ class _BaseChallengeState extends State<BaseChallenge> {
                           shouldShowHint = true;
                         });
                       },
-                          icon: Icon(Icons.help_outline)),
+                          child: Row(
+                            children: <Widget>[
+                              Icon(Icons.help_outline),
+                              Icon(FontAwesomeIcons.ad),
+                            ],
+                          )),
                     ],
                   )),
             ),
