@@ -14,15 +14,15 @@ class Passcode extends StatefulWidget {
 
 class _PasscodeState extends State<Passcode>
     with SingleTickerProviderStateMixin {
+  int _counterStart = 5;
   var _inputKey = Key("input");
   bool _attempted = false;
-
 
   decrementCounter(challenge) {
     var stateJson = json.decode(challenge.state);
     var counter = stateJson['counter'];
     if (counter == null) {
-      counter = 1;
+      counter = _counterStart;
     } else if (counter > 0) {
       counter--;
     }
@@ -82,10 +82,12 @@ class _PasscodeState extends State<Passcode>
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
-              children: <Widget>[Icon(Icons.lock_open), Text(counter.toString())
+              children: <Widget>[
+                counter == 0 ? Icon(Icons.lock_open) : Icon(Icons.lock_outline),
+                Text(counter.toString())
               ],
-        )
-      ],
-    ));
+            )
+          ],
+        ));
   }
 }
