@@ -1,4 +1,6 @@
 import 'package:ctw_flutter/data/challenge-progress-entity.dart';
+import 'package:ctw_flutter/ui/challenges/hints.dart';
+import 'package:flutter/material.dart';
 
 class Challenge {
   int id;
@@ -9,6 +11,14 @@ class Challenge {
 
   Challenge(this.name,
       {this.id, this.score = 0, this.completed = false, this.state = "{}"});
+
+  bool hasHints() {
+    return Hints.exist(name);
+  }
+
+  Widget getHint(int hintNumber) {
+    return Hints.get(name, hintNumber);
+  }
 
   ChallengeProgressEntity toEntity() {
     return ChallengeProgressEntity(
