@@ -46,13 +46,13 @@ ThemeData getTheme() {
 //    ),
 //    primaryTextTheme: Typography.blackMountainView.copyWith(
 //    ),
-//    buttonTheme: ButtonThemeData(
+    buttonTheme: ButtonThemeData(
 //        padding: ???,
 //        minWidth: double.infinity,
-//        colorScheme: ColorScheme.dark(
-//            primary: primary,
+        colorScheme: ColorScheme.dark(
+//            primary: primaryColor,
 //            primaryVariant: ???
-//        )
-//    ),
+        )
+    ),
   );
 }
