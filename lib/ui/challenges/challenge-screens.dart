@@ -11,6 +11,7 @@ import 'gesture/drag-and-drop.dart';
 import 'gesture/long-press.dart';
 import 'gesture/single-tap.dart';
 import 'gesture/sort.dart';
+import 'gesture/spring.dart';
 import 'input/hidden-word.dart';
 import 'input/local-auth.dart';
 import 'input/passcode.dart';
@@ -36,4 +37,5 @@ final Map<String, GetChallengeScreen> challengeScreens = {
   "sort": wrapChallenge(Sort()),
   "battery": wrapChallenge(ChargeBattery()),
   "maze": wrapChallenge(MazeChallenge()),
+  "spring": wrapChallenge(Spring()),
 };
