@@ -107,6 +107,7 @@ class _HomeState extends State<Home> {
   Widget getChallengeTiles(AppState state, BuildContext context) {
     var _tiles = (state.challenges ?? {})
         .values
+        .where((c) => challengeScreens[c.name] != null)
         .toList()
         .asMap() // Stupid way of doing map with index :/
         .map((index, challenge) {
