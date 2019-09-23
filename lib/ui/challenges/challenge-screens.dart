@@ -13,7 +13,6 @@ import 'gesture/single-tap.dart';
 import 'gesture/sort.dart';
 import 'gesture/spring.dart';
 import 'input/hidden-word.dart';
-import 'input/local-auth.dart';
 import 'input/passcode.dart';
 
 GetChallengeScreen wrapChallenge(challengeScreen) =>
@@ -31,7 +30,7 @@ final Map<String, GetChallengeScreen> challengeScreens = {
   "drag-and-drop": wrapChallenge(DragAndDrop()),
   "rotate": wrapChallenge(Rotate()),
   "shake": wrapChallenge(Shake()),
-  "local-auth": wrapChallenge(LocalAuth()),
+//  "local-auth": wrapChallenge(LocalAuth()), // meh
   "passcode": wrapChallenge(Passcode()),
   "hidden-word": wrapChallenge(HiddenWord()),
   "sort": wrapChallenge(Sort()),
