@@ -157,7 +157,7 @@ class _BaseChallengeState extends State<BaseChallenge> {
                           child: Row(
                             children: <Widget>[
                               Icon(Icons.help_outline),
-                              Icon(FontAwesomeIcons.ad),
+                              Icon(FontAwesomeIcons.ad, size: 25,),
                             ],
                           )),
                     ],
