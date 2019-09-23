@@ -36,7 +36,7 @@ class _BaseChallengeState extends State<BaseChallenge> {
   StarScore _starScore;
   Stopwatch _stopwatch = Stopwatch();
   InterstitialAd interstitialAd;
-  bool shouldShowHint = false;
+  int showHint = -1;
 
   @override
   void initState() {
@@ -112,58 +112,62 @@ class _BaseChallengeState extends State<BaseChallenge> {
       data: this,
       child: Scaffold(
           body: Stack(children: [
-            Container(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
+          Container(
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
                 // Box decoration takes a gradient
-                    gradient: LinearGradient(
-                      // Where the linear gradient begins and ends
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      // Add one stop for each color. Stops should increase from 0 to 1
-                      stops: [0, 1],
-                      colors: [
-                        backgroundGradient_1,
-                        backgroundGradient_2,
-                      ],
-                    )),
-                child: SafeArea(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: <Widget>[
-                      _completed ? SuccessPopup(_starScore) : widget.child,
-                    ],
-                  ),
-                )),
-            SafeArea(
-              child: Container(
-                  alignment: Alignment.topRight,
-                  child: Row(
+              gradient: LinearGradient(
+                // Where the linear gradient begins and ends
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                // Add one stop for each color. Stops should increase from 0 to 1
+                stops: [0, 1],
+                colors: [
+                  backgroundGradient_1,
+                  backgroundGradient_2,
+                ],
+              )),
+          child: SafeArea(
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                _completed ? SuccessPopup(_starScore) : widget.child,
+              ],
+            ),
+          )),
+        SafeArea(
+            child: Container(
+                alignment: Alignment.topRight,
+                child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      //TODO Hints should be icon / image based?
-                      Text(shouldShowHint ? "Hint " : ""),
-                      FlatButton(
-                      onPressed: () {
-                        debugPrint("Hint requested");
-                        if (enableAds) {
-                          interstitialAd.show();
-                        }
-                        setState(() {
-                          shouldShowHint = true;
-                        });
-                      },
-                          child: Row(
-                            children: <Widget>[
-                              Icon(Icons.help_outline),
-                              Icon(FontAwesomeIcons.ad, size: 25,),
-                            ],
-                          )),
-                    ],
-                  )),
+                if (showHint >= 0) widget.challenge.getHint(showHint),
+            if (widget.challenge.hasHints())
+    FlatButton(
+        onPressed: () {
+          debugPrint("Hint requested");
+          if (enableAds) {
+            interstitialAd.show();
+          }
+          setState(() {
+            showHint++;
+          });
+        },
+        child: Row(
+          children: <Widget>[
+            Icon(Icons.help_outline),
+            Icon(
+              FontAwesomeIcons.ad,
+              size: 25,
             ),
-          ])),
+          ],
+        ))
+    ,
+    ],
+    )),
+    ),
+    ])),
     );
   }
 
