@@ -5,11 +5,11 @@ import 'package:ctw_flutter/domain/scoring.dart';
 import 'package:ctw_flutter/theme.dart';
 import 'package:ctw_flutter/ui/widgets/success-popup.dart';
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../app.dart';
 import '../../main.dart';
 import '../../state-container.dart';
 
@@ -42,10 +42,10 @@ class _BaseChallengeState extends State<BaseChallenge> {
   void initState() {
     super.initState();
     debugPrint("Challenge started: ${widget.challenge.name}");
-    MyApp.analytics
-        .setCurrentScreen(screenName: widget.challenge.name)
-        .then((_) => debugPrint("Sent current screen to GA"), onError: (e) {
-      debugPrint("Failed to send current screen to GA! $e");
+    FirebaseAnalytics().setCurrentScreen(screenName: widget.challenge.name)
+        .then((_) => debugPrint("Sent current screen to Firebase Analytics"),
+        onError: (e) {
+          debugPrint("Failed to send current screen to Firebase Analytics! $e");
     });
     _stopwatch.start();
     if (enableAds) {
@@ -97,12 +97,14 @@ class _BaseChallengeState extends State<BaseChallenge> {
     Future.delayed(Duration(seconds: 1), () {
       Navigator.pop(context);
     });
-    MyApp.analytics.logEvent(name: "level_complete", parameters: {
+    FirebaseAnalytics().logEvent(name: "level_complete", parameters: {
       "score": _stopwatch.elapsed.inSeconds,
       "stars": starScore.toString(),
       "level": widget.challenge.name,
-    }).then((_) => debugPrint("Sent current screen to GA"), onError: (e) {
-      debugPrint("Failed to send current screen to GA!: $e");
+    }).then((_) => debugPrint("Sent level_complete to Firebase Analytics"),
+        onError: (e) {
+          debugPrint(
+              "Failed to send level_complete to Firebase Analytics!: $e");
     });
   }
 

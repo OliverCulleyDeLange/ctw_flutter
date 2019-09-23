@@ -5,12 +5,10 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
-  static FirebaseAnalytics analytics = FirebaseAnalytics();
-  static FirebaseAnalyticsObserver observer =
-  FirebaseAnalyticsObserver(analytics: analytics);
-
   @override
   Widget build(BuildContext context) {
+    FirebaseAnalyticsObserver observer =
+    FirebaseAnalyticsObserver(analytics: FirebaseAnalytics());
     return MaterialApp(
       title: "Cheat to win",
       theme: getTheme(),
