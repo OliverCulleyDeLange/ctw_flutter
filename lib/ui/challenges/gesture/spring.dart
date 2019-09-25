@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vector_math/vector_math_64.dart' show Vector3;
 
 class Spring extends StatelessWidget {
   Widget build(BuildContext context) {
-    return Magnets(
-      child: Icon(
-        FontAwesomeIcons.magnet,
-        color: Colors.blue,
-        size: 100,
+    return Stack(fit: StackFit.expand, children: [
+      Movable(
+        child: SizedBox(
+            width: 10,
+            height: 10,
+            child: SvgPicture.asset('assets/img/magnet.svg')),
+        snapTo: Alignment.topCenter,
       ),
-    );
+      Movable(
+        child: SvgPicture.asset('assets/img/magnet.svg'),
+        snapTo: Alignment.bottomCenter,
+      ),
+    ]);
   }
 }
 
@@ -20,18 +26,18 @@ class Spring extends StatelessWidget {
 
 /// A draggable card that moves back to [Alignment.center] when it's
 /// released.
-class Magnets extends StatefulWidget {
+class Movable extends StatefulWidget {
   final Widget child;
+  final Alignment snapTo;
 
-  Magnets({this.child});
+  Movable({@required this.child, @required this.snapTo});
 
   @override
-  _MagnetsState createState() => _MagnetsState();
+  _MovableState createState() => _MovableState();
 }
 
-class _MagnetsState extends State<Magnets> with SingleTickerProviderStateMixin {
+class _MovableState extends State<Movable> with SingleTickerProviderStateMixin {
   AnimationController _controller;
-
   Animation<Matrix4> _animation;
 
   double _scale;
@@ -39,15 +45,19 @@ class _MagnetsState extends State<Magnets> with SingleTickerProviderStateMixin {
 
   Vector3 _translate;
   Vector3 _previousTranslate;
+
   double _rotate;
   double _previousRotation;
 
   /// Calculates and runs a [SpringSimulation].
   void _runAnimation(Offset pixelsPerSecond, Size size) {
+    var snapOffset = widget.snapTo.alongSize(size);
+    debugPrint("$snapOffset");
     _animation = _controller.drive(
       Matrix4Tween(
         begin: Matrix4.translation(_translate),
-        end: Matrix4.zero(),
+        end: Matrix4.translation(
+            centerTransformFromFocalPoint(widget.snapTo.alongSize(size), size)),
       ),
     );
     // Calculate the velocity relative to the unit interval, [0,1],
@@ -93,7 +103,7 @@ class _MagnetsState extends State<Magnets> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  Vector3 centerTransformFromFocalPoint(focalPoint, viewSize) =>
+  Vector3 centerTransformFromFocalPoint(Offset focalPoint, Size viewSize) =>
       Vector3(
         focalPoint.dx - (viewSize.width / 2),
         focalPoint.dy - (viewSize.height / 2),
@@ -104,7 +114,7 @@ class _MagnetsState extends State<Magnets> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+      behavior: HitTestBehavior.deferToChild,
       onScaleStart: (details) {
         _controller.stop();
         setState(() {
