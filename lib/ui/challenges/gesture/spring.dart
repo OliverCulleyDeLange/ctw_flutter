@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:vector_math/vector_math_64.dart' show Vector3;
 
 class Spring extends StatelessWidget {
   Widget build(BuildContext context) {
-    return DraggableCard(
-      child: Icon(FontAwesomeIcons.magnet),
+    return Magnets(
+      child: Icon(
+        FontAwesomeIcons.magnet,
+        color: Colors.blue,
+        size: 100,
+      ),
     );
   }
 }
@@ -15,17 +20,16 @@ class Spring extends StatelessWidget {
 
 /// A draggable card that moves back to [Alignment.center] when it's
 /// released.
-class DraggableCard extends StatefulWidget {
+class Magnets extends StatefulWidget {
   final Widget child;
 
-  DraggableCard({this.child});
+  Magnets({this.child});
 
   @override
-  _DraggableCardState createState() => _DraggableCardState();
+  _MagnetsState createState() => _MagnetsState();
 }
 
-class _DraggableCardState extends State<DraggableCard>
-    with SingleTickerProviderStateMixin {
+class _MagnetsState extends State<Magnets> with SingleTickerProviderStateMixin {
   AnimationController _controller;
 
   /// The alignment of the card as it is dragged or being animated.
@@ -33,16 +37,23 @@ class _DraggableCardState extends State<DraggableCard>
   /// While the card is being dragged, this value is set to the values computed
   /// in the GestureDetector onPanUpdate callback. If the animation is running,
   /// this value is set to the value of the [_animation].
-  Alignment _dragAlignment = Alignment.center;
+  Alignment _dragAlignment = Alignment.bottomCenter;
 
   Animation<Alignment> _animation;
+
+  double _scale = 1;
+  double _previousScale = 1;
+  Vector3 _translate = Vector3(0.0, 0.0, 0.0);
+  Vector3 _previousTranslate = Vector3(0.0, 0.0, 0.0);
+  double _rotate = 0;
+  double _previousRotation = 0;
 
   /// Calculates and runs a [SpringSimulation].
   void _runAnimation(Offset pixelsPerSecond, Size size) {
     _animation = _controller.drive(
       AlignmentTween(
         begin: _dragAlignment,
-        end: Alignment.center,
+        end: Alignment.bottomCenter,
       ),
     );
     // Calculate the velocity relative to the unit interval, [0,1],
@@ -85,22 +96,47 @@ class _DraggableCardState extends State<DraggableCard>
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return GestureDetector(
-      onPanDown: (details) {
+      behavior: HitTestBehavior.opaque,
+      onScaleStart: (details) {
+//        debugPrint("onScaleStart $details");
         _controller.stop();
       },
-      onPanUpdate: (details) {
+      onScaleUpdate: (details) {
         setState(() {
-          _dragAlignment += Alignment(
-            details.delta.dx / (size.width / 2),
-            details.delta.dy / (size.height / 2),
+          _rotate += details.rotation - _previousRotation;
+          _previousRotation = details.rotation;
+
+          _scale += details.scale - _previousScale;
+          _previousScale = details.scale;
+
+          var _pos = Vector3(
+            details.focalPoint.dx - (size.width / 2),
+            details.focalPoint.dy - (size.height / 2),
+            0.0,
           );
+          _translate += _pos - _previousTranslate;
+          _previousTranslate = _translate;
+
+//          debugPrint(
+//              "rotate: $_rotate, scale: $_scale, translate: $_translate");
+
         });
       },
-      onPanEnd: (details) {
+      onScaleEnd: (details) {
+//        debugPrint("onScaleEnd $details");
         _runAnimation(details.velocity.pixelsPerSecond, size);
+        setState(() {
+          _previousRotation = 0;
+          _previousScale = 1;
+          _previousTranslate = Vector3(0.0, 0.0, 0.0);
+        });
       },
-      child: Align(
-        alignment: _dragAlignment,
+      child: Transform(
+        alignment: Alignment.center,
+        transform: Matrix4.translation(_translate)
+          ..rotateZ(_rotate)
+          ..scale(_scale, _scale, 0.0),
+        transformHitTests: true,
         child: widget.child,
       ),
     );
