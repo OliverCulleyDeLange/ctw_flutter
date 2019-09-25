@@ -32,28 +32,22 @@ class Magnets extends StatefulWidget {
 class _MagnetsState extends State<Magnets> with SingleTickerProviderStateMixin {
   AnimationController _controller;
 
-  /// The alignment of the card as it is dragged or being animated.
-  ///
-  /// While the card is being dragged, this value is set to the values computed
-  /// in the GestureDetector onPanUpdate callback. If the animation is running,
-  /// this value is set to the value of the [_animation].
-  Alignment _dragAlignment = Alignment.bottomCenter;
+  Animation<Matrix4> _animation;
 
-  Animation<Alignment> _animation;
+  double _scale;
+  double _previousScale;
 
-  double _scale = 1;
-  double _previousScale = 1;
-  Vector3 _translate = Vector3(0.0, 0.0, 0.0);
-  Vector3 _previousTranslate = Vector3(0.0, 0.0, 0.0);
-  double _rotate = 0;
-  double _previousRotation = 0;
+  Vector3 _translate;
+  Vector3 _previousTranslate;
+  double _rotate;
+  double _previousRotation;
 
   /// Calculates and runs a [SpringSimulation].
   void _runAnimation(Offset pixelsPerSecond, Size size) {
     _animation = _controller.drive(
-      AlignmentTween(
-        begin: _dragAlignment,
-        end: Alignment.bottomCenter,
+      Matrix4Tween(
+        begin: Matrix4.translation(_translate),
+        end: Matrix4.zero(),
       ),
     );
     // Calculate the velocity relative to the unit interval, [0,1],
@@ -77,11 +71,18 @@ class _MagnetsState extends State<Magnets> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    _scale = 1;
+    _previousScale = 1;
+    _translate = Vector3(0.0, 0.0, 0.0);
+    _previousTranslate = Vector3(0.0, 0.0, 0.0);
+    _rotate = 0;
+    _previousRotation = 0;
+
     _controller = AnimationController(vsync: this);
 
     _controller.addListener(() {
       setState(() {
-        _dragAlignment = _animation.value;
+        _translate = _animation.value.getTranslation();
       });
     });
   }
@@ -92,20 +93,23 @@ class _MagnetsState extends State<Magnets> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
+  Vector3 centerTransformFromFocalPoint(focalPoint, viewSize) =>
+      Vector3(
+        focalPoint.dx - (viewSize.width / 2),
+        focalPoint.dy - (viewSize.height / 2),
+        0.0,
+      );
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onScaleStart: (details) {
-//        debugPrint("onScaleStart $details");
         _controller.stop();
         setState(() {
-          _previousTranslate = Vector3(
-            details.focalPoint.dx - (size.width / 2),
-            details.focalPoint.dy - (size.height / 2),
-            0.0,
-          );
+          _previousTranslate =
+              centerTransformFromFocalPoint(details.focalPoint, size);
         });
       },
       onScaleUpdate: (details) {
@@ -116,22 +120,13 @@ class _MagnetsState extends State<Magnets> with SingleTickerProviderStateMixin {
           _scale += details.scale - _previousScale;
           _previousScale = details.scale;
 
-          var _pos = Vector3(
-            details.focalPoint.dx - (size.width / 2),
-            details.focalPoint.dy - (size.height / 2),
-            0.0,
-          );
+          var _pos = centerTransformFromFocalPoint(details.focalPoint, size);
           var _delta = _pos - _previousTranslate;
-          debugPrint("$_delta");
           _translate += _delta;
           _previousTranslate = _pos;
-
-//          debugPrint(
-//              "rotate: $_rotate, scale: $_scale, translate: $_translate");
         });
       },
       onScaleEnd: (details) {
-//        debugPrint("onScaleEnd $details");
         _runAnimation(details.velocity.pixelsPerSecond, size);
         setState(() {
           _previousRotation = 0;
