@@ -100,6 +100,13 @@ class _MagnetsState extends State<Magnets> with SingleTickerProviderStateMixin {
       onScaleStart: (details) {
 //        debugPrint("onScaleStart $details");
         _controller.stop();
+        setState(() {
+          _previousTranslate = Vector3(
+            details.focalPoint.dx - (size.width / 2),
+            details.focalPoint.dy - (size.height / 2),
+            0.0,
+          );
+        });
       },
       onScaleUpdate: (details) {
         setState(() {
@@ -114,12 +121,13 @@ class _MagnetsState extends State<Magnets> with SingleTickerProviderStateMixin {
             details.focalPoint.dy - (size.height / 2),
             0.0,
           );
-          _translate += _pos - _previousTranslate;
-          _previousTranslate = _translate;
+          var _delta = _pos - _previousTranslate;
+          debugPrint("$_delta");
+          _translate += _delta;
+          _previousTranslate = _pos;
 
 //          debugPrint(
 //              "rotate: $_rotate, scale: $_scale, translate: $_translate");
-
         });
       },
       onScaleEnd: (details) {
@@ -128,7 +136,6 @@ class _MagnetsState extends State<Magnets> with SingleTickerProviderStateMixin {
         setState(() {
           _previousRotation = 0;
           _previousScale = 1;
-          _previousTranslate = Vector3(0.0, 0.0, 0.0);
         });
       },
       child: Transform(
