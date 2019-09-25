@@ -115,7 +115,7 @@ class _BaseChallengeState extends State<BaseChallenge> {
       child: Scaffold(
           body: Stack(children: [
           Container(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          padding: EdgeInsets.fromLTRB(20, 60, 20, 20,),
           alignment: Alignment.center,
           decoration: BoxDecoration(
                 // Box decoration takes a gradient
@@ -132,6 +132,7 @@ class _BaseChallengeState extends State<BaseChallenge> {
               )),
           child: SafeArea(
             child: Stack(
+              fit: StackFit.expand,
               alignment: Alignment.center,
               children: <Widget>[
                 _completed ? SuccessPopup(_starScore) : widget.child,
