@@ -18,8 +18,7 @@ class BaseChallenge extends StatefulWidget {
   final Challenge challenge;
   final Scorer scorer;
 
-  BaseChallenge(
-      {this.child, this.scorer = TimeScorer.fastThreeStar, this.challenge});
+  BaseChallenge({this.child, this.scorer = TimeScorer.fastThreeStar, this.challenge});
 
   static _BaseChallengeState of(BuildContext context) {
     return (context.inheritFromWidgetOfExactType(_ChallengeState)
@@ -132,7 +131,8 @@ class _BaseChallengeState extends State<BaseChallenge> {
               )),
           child: SafeArea(
             child: Stack(
-              fit: StackFit.expand,
+//              key: BaseChallenge.challengeAreaKey,
+//              fit: StackFit.expand,
               alignment: Alignment.center,
               children: <Widget>[
                 _completed ? SuccessPopup(_starScore) : widget.child,
