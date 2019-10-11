@@ -13,6 +13,8 @@ bool enableAds = false;
 void main() => run();
 
 void run() {
+//  debugPrintGestureArenaDiagnostics = true;
+
   if (enableAds && Platform.isAndroid) {
     FirebaseAdMob.instance.initialize(
         appId: "ca-app-pub-9025204136165737~5839198623");
