@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class DoubleTap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-      return GestureDetector(
+    return Center(
+      child: GestureDetector(
         onDoubleTap: () {
           BaseChallenge.of(context).complete();
         },
@@ -14,6 +15,7 @@ class DoubleTap extends StatelessWidget {
             Icon(Icons.touch_app),
             Icon(Icons.looks_two),
           ],
+        ),
         ),
       );
   }

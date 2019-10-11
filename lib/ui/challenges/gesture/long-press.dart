@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class LongPress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-      return GestureDetector(
+    return Center(
+      child: GestureDetector(
         onLongPress: () {
           BaseChallenge.of(context).complete();
         },
@@ -14,6 +15,7 @@ class LongPress extends StatelessWidget {
             Icon(Icons.touch_app),
             Icon(Icons.hourglass_empty),
           ],
+        ),
         ),
       );
   }
