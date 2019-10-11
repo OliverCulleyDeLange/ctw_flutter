@@ -5,7 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class DragAndDrop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-      return Row(
+    return Center(
+      child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
 //          Icon(Icons.touch_app),
@@ -32,6 +33,7 @@ class DragAndDrop extends StatelessWidget {
             },
           )
         ],
+      ),
       );
   }
 }
