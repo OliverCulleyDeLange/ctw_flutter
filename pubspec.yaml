@@ -17,8 +17,8 @@ environment:
   sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
-  gesturable:
-    path: ../gesturable/
+#  gesturable:
+#    path: ../gesturable/
   flutter:
     sdk: flutter
   firebase_core: ^0.4.0+1

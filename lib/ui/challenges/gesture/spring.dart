@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gesturable/gesturable.dart';
+//import 'package:gesturable/gesturable.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 class Spring extends StatefulWidget {
@@ -26,19 +26,19 @@ class _SpringState extends State<Spring> {
           quarterTurns: 2,
         ),
       ),
-      Movable(
-          snapTo: Alignment(0.0, -0.5),
-          onMove: (offset, scale, rotate) {
-            _offset = offset;
-            _scale = scale;
-            _rotate = rotate;
-          },
-          shouldSnap: (velocity) {
-            return false;
-          },
-          child: SvgPicture.asset(
-            'assets/img/magnet.svg',
-          )),
+//      Movable(
+//          snapTo: Alignment(0.0, -0.5),
+//          onMove: (offset, scale, rotate) {
+//            _offset = offset;
+//            _scale = scale;
+//            _rotate = rotate;
+//          },
+//          shouldSnap: (velocity) {
+//            return false;
+//          },
+//          child: SvgPicture.asset(
+//            'assets/img/magnet.svg',
+//          )),
     ]);
   }
 }
