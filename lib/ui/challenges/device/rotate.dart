@@ -1,5 +1,7 @@
-import 'package:ctw_flutter/ui/challenges/base-challenge.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+
+import '../base-challenge.dart';
 
 class Rotate extends StatefulWidget {
   @override
@@ -16,19 +18,18 @@ class _RotateState extends State<Rotate> {
           .of(context)
           .orientation;
       debugPrint("Initial orientation = $initOrientation");
+    } else if (MediaQuery
+        .of(context)
+        .orientation != initOrientation) {
+      SchedulerBinding.instance
+          .addPostFrameCallback((time) => BaseChallenge.of(context).complete());
     }
-    return BaseChallenge(
-        complete: MediaQuery
-            .of(context)
-            .orientation != initOrientation,
-        getChallengeWidget: (complete) {
-          return Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Icon(Icons.rotate_left),
-                ],
-              ));
-        });
+    return Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Icon(Icons.rotate_left),
+          ],
+        ));
   }
 }

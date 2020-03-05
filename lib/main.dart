@@ -1,44 +1,31 @@
-import 'package:ctw_flutter/bloc/challenge-bloc.dart';
-import 'package:ctw_flutter/domain/home-models.dart';
-import 'package:ctw_flutter/theme.dart';
-import 'package:ctw_flutter/ui/home.dart';
+import 'dart:io';
+
+import 'package:ctw_flutter/state-container.dart';
 import 'package:ctw_flutter/ui/widgets/restart.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-void main() => runApp(GlobalProviders());
+import 'app.dart';
+import 'data/challenge-progress-repository.dart';
 
-class GlobalProviders extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(providers: <SingleChildCloneableWidget>[
-      ChangeNotifierProvider(
-        builder: (context) {
-          debugPrint("Building HomeViewModel");
-          return HomeViewModel();
-        },
-      ),
-      Provider(
-        builder: (context) {
-          debugPrint("Building ChallengeProgressBloc");
-          return ChallengeProgressBloc();
-        },
-        dispose: (context, ChallengeProgressBloc bloc) => bloc?.dispose(),
-      ),
-    ], child: MyApp());
+bool enableAds = false;
+
+void main() => run();
+
+void run() {
+//  debugPrintGestureArenaDiagnostics = true;
+
+  if (enableAds && Platform.isAndroid) {
+    FirebaseAdMob.instance.initialize(
+        appId: "ca-app-pub-9025204136165737~5839198623");
+  } else if (enableAds && Platform.isIOS) {
+    FirebaseAdMob.instance.initialize(
+        appId: "ca-app-pub-9025204136165737~6974803433");
   }
-}
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return RestartWidget(
-        child: MaterialApp(
-          title: "Cheat to win",
-          theme: getTheme(),
-          home: Scaffold(
-            body: Home(),
-          ),
-        ));
-  }
+  return runApp(RestartWidget(
+      child: StateContainer(
+        child: MyApp(),
+        challengeProgressRepository: LocalChallengeProgressRepository(),
+      )));
 }

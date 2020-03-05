@@ -1,59 +1,153 @@
-import 'dart:math';
+import 'dart:io';
 
-import 'package:ctw_flutter/bloc/challenge-bloc.dart';
-import 'package:ctw_flutter/data/challenge-progress.dart';
-import 'package:ctw_flutter/domain/home-models.dart';
+import 'package:ctw_flutter/data/db.dart';
+import 'package:ctw_flutter/domain/app-state.dart';
+import 'package:ctw_flutter/domain/scoring.dart';
+import 'package:ctw_flutter/ui/widgets/challenge-tile.dart';
+import 'package:ctw_flutter/ui/widgets/restart.dart';
+import 'package:ctw_flutter/ui/widgets/success-popup.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class Home extends StatelessWidget {
+import '../main.dart';
+import '../state-container.dart';
+import 'challenges/challenge-screens.dart';
+
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  int _gridRowSize = 4;
+  bool showSuccessPopup = false;
+  StarScore _starScore = StarScore(2, 3);
+  BannerAd bannerAd;
+  bool adShown = false;
+
+  getBannerAd() =>
+      BannerAd(
+        adUnitId: getBannerAdId(),
+        size: AdSize.banner,
+        listener: (MobileAdEvent event) {
+          print("BannerAd event is $event");
+          if (event == MobileAdEvent.loaded) {
+            setState(() {
+              adShown = true;
+            });
+          }
+        },
+        targetingInfo: MobileAdTargetingInfo(
+          testDevices: <String>[
+            "CFC6796C5F6C8026B3C8AE612F629556"
+          ], // Android emulators are considered test devices
+        ),
+      );
+
+  @override
+  void initState() {
+    if (enableAds) {
+      bannerAd = getBannerAd();
+      bannerAd
+        ..load()
+        ..show();
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (enableAds) {
+      bannerAd.dispose();
+    }
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var challengeProgressBloc = Provider.of<ChallengeProgressBloc>(context);
-    return StreamBuilder(
-      stream: challengeProgressBloc.challenges,
-      builder: (BuildContext context,
-          AsyncSnapshot<List<ChallengeProgress>> challengeProgress) {
-        debugPrint(
-            "DB Stream: ${challengeProgress.data?.map((c) => "${c.id}:${c
-                .name} - ${c
-                .completed}")}");
+    final container = StateContainer.of(context);
+    final state = container.state;
+//    debugPrint(
+//        "Building Home screen: ${state.challenges?.entries?.map((e) => "${e
+//            .value.name}:${e.value.completed}")?.reduce((val, elem) =>
+//        val + ", $elem")}");
 
-        return Consumer<HomeViewModel>(builder: (context, viewModel, child) {
-          var _challengeTiles = viewModel.challengeTiles
-              .map((tile) => tile.get(context, tile.title))
-              .toList();
-          var _menuTiles =
-          viewModel.menuTiles.map((tile) => tile.get(context)).toList();
-          var _allTiles = _challengeTiles;
-          for (var i = 0; i < _menuTiles.length; i++) {
-            var insertIndex =
-                viewModel.gridRowSize * (i + 1) + (i * Random().nextInt(3));
-            if (_allTiles.length > insertIndex) {
-              _allTiles.insert(insertIndex, _menuTiles[i]);
-            } else {
-              _allTiles.add(_menuTiles[i]);
-            }
-          }
+    return Stack(alignment: Alignment.center, children: <Widget>[
+      getHomeScreen(state, context),
+      showSuccessPopup ? SuccessPopup(_starScore) : Container(),
+    ]);
+  }
 
-          return Column(
-            children: <Widget>[
-              Expanded(
-                child: GridView.count(
-                    crossAxisCount: viewModel.gridRowSize, children: _allTiles),
-              ),
-              Slider(
-                value: viewModel.gridRowSize.toDouble(),
-                onChanged: (double value) {
-                  viewModel.setGridRowSize(value);
-                },
-                max: 5,
-                min: 3,
-              )
-            ],
-          );
-        });
-      },
+  Scaffold getHomeScreen(AppState state, BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: <Widget>[
+          Expanded(child: getChallengeTiles(state, context)),
+          Slider(
+            value: _gridRowSize.toDouble(),
+            onChanged: (double value) {
+              var round = value.round();
+              if (_gridRowSize != round) {
+                setState(() {
+                  _gridRowSize = round;
+                });
+              }
+            },
+            max: 5,
+            min: 3,
+          ),
+          Container(
+            padding: adShown ? EdgeInsets.only(bottom: 50) : EdgeInsets.all(0),
+          )
+        ],
+      ),
     );
   }
+
+  Widget getChallengeTiles(AppState state, BuildContext context) {
+    var _tiles = (state.challenges ?? {})
+        .values
+        .where((c) => challengeScreens[c.name] != null)
+        .toList()
+        .asMap() // Stupid way of doing map with index :/
+        .map((index, challenge) {
+      var tileLabel = state.showCode && index < 4
+          ? state.passcode.substring(index, index + 1)
+          : challenge.id.toString();
+      return MapEntry(
+          index,
+          ChallengeTile(
+              completed: challenge.completed,
+              challengeScreen: challengeScreens[challenge.name](challenge),
+              text: tileLabel));
+    }).values;
+    List<Widget> _challengeTiles = List<Widget>.from(_tiles);
+
+    List<Widget> _menuTiles = [
+      Center(
+          child: Text(
+            state.score != null ? state.score.toString() : "0",
+            textScaleFactor: 2,
+          )),
+      InkWell(
+          onTap: () async {
+            await ChallengeProgressDB.resetDb();
+            RestartWidget.restartApp(context);
+          },
+          child: Icon(Icons.refresh)),
+    ];
+
+    List<Widget> _allTiles = _challengeTiles;
+    _allTiles.addAll(_menuTiles);
+
+    return _allTiles != null
+        ? GridView.count(crossAxisCount: _gridRowSize, children: _allTiles)
+        : Container();
+  }
+}
+
+getBannerAdId() {
+  if (Platform.isAndroid)
+    return "ca-app-pub-9025204136165737/2605147732";
+  else if (Platform.isIOS) return "";
 }

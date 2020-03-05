@@ -14,30 +14,43 @@ description: Cheat to win - Flutter
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
+#  gesturable:
+#    path: ../gesturable/
   flutter:
     sdk: flutter
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  firebase_core: ^0.4.0+1
+  firebase_analytics: ^4.0.2
+  english_words: ^3.1.5
   cupertino_icons: ^0.1.2
   font_awesome_flutter: 8.4.0
   shared_preferences: ^0.5.3+1
   code_input: ^1.0.3
   local_auth: ^0.5.2+3
   sensors: ^0.4.0+1
-  provider: ^3.0.0+1
   sqflite: ^1.1.6
   path: ^1.6.2
   flutter_stetho: ^0.2.2
+  auto_size_text: ^2.1.0
+  battery: ^0.3.0+5
+  firebase_admob: ^0.9.0+7
+  flame: ^0.15.2
+  flutter_svg: ^0.14.1
+#  vector_math: any
+
 
 dev_dependencies:
   test: ^1.6.1
+  flutter_launcher_icons: "^0.7.3"
   flutter_test:
     sdk: flutter
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
@@ -51,9 +64,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #  - images/a_dot_burr.jpeg
-  #  - images/a_dot_ham.jpeg
+  assets:
+  - assets/img/magnet.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

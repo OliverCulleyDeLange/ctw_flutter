@@ -10,11 +10,11 @@ class LocalAuth extends StatefulWidget {
 class _LocalAuthState extends State<LocalAuth> {
   bool canCheckBiometrics = false;
 
-  doAuth(complete, context) async {
+  doAuth(context) async {
     bool authd = await LocalAuthentication()
         .authenticateWithBiometrics(localizedReason: "");
     if (authd) {
-      complete(context);
+      BaseChallenge.of(context).complete();
     }
   }
 
@@ -33,14 +33,12 @@ class _LocalAuthState extends State<LocalAuth> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseChallenge(getChallengeWidget: (complete) {
       return Container(
           child: GestureDetector(
-            onTap: () => doAuth(complete, context),
+            onTap: () => doAuth(context),
             child: canCheckBiometrics
                 ? Icon(Icons.fingerprint)
                 : Icon(Icons.vpn_key),
           ));
-    });
   }
 }

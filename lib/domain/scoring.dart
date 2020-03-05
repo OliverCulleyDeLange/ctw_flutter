@@ -32,6 +32,9 @@ class StarScore {
   int _score;
   int _outOf;
 
+  @override
+  String toString() => "$_score/$_outOf";
+
   StarScore(this._score, this._outOf)
       : assert(_score <= _outOf),
         assert(_score >= 0);

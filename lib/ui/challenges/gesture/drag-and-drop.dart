@@ -5,15 +5,15 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class DragAndDrop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BaseChallenge(getChallengeWidget: (complete) {
-      return Row(
+    return Center(
+      child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Icon(Icons.touch_app),
+//          Icon(Icons.touch_app),
           Draggable(
             onDragEnd: (details) {
               if (details.wasAccepted) {
-                complete(context);
+                BaseChallenge.of(context).complete();
               }
             },
             child: Icon(FontAwesomeIcons.recycle),
@@ -33,7 +33,7 @@ class DragAndDrop extends StatelessWidget {
             },
           )
         ],
+      ),
       );
-    });
   }
 }

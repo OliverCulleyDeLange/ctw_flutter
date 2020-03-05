@@ -2,17 +2,19 @@
 
 A Flutter game app.
 
+### TODO
+- Clues
+
 ### USPs:
 - No words, all emoji / icons / images (no i18n or string management)
 
-### Challenges (and how you cheat)
-- Long press tile
-- Click X times
-- Answer hidden in image so you have to tilt phone
-- Left hand or right hand dialog box - only one shot (watch ad to try again)
-- One challenge tile you can't just tap on, you need to press and hold it / double tap
-- Battery level
-
+### Challenges
+- Rhyming words
+- Kids block toy - drag and drop
+- Make a shape / image out of a tool box of lines / shapes
+- Drawing pad canvas thing
+- Spot the difference
+- Word search
 - Quiz questions / Riddles - (google the answer)
 - Be in a location - (fake GPS)
 - Hidden menu to complete a level, down like 100 layers
@@ -20,9 +22,6 @@ A Flutter game app.
     - Maze game - drag and drop the player, no need to complete the maze
 - Totally random score for completing a level.?
 - Hide a clue / code whatever in the description of the app in the app store
-
-More draggable stuff: https://medium.com/flutter-community/a-deep-dive-into-draggable-and-dragtarget-in-flutter-487919f6f1e4
-
 
 Monetisation / Propagation:
 - Watch ad for hints / clues
